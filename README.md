@@ -24,7 +24,7 @@
     + [Publish the Docker image](01-01-docker/README.md#publish-the-docker-image)
   * [Running Docker Containers](01-01-docker/README.md#running-docker-containers)
     + [Remove local Docker images](01-01-docker/README.md#remove-local-docker-images)
-    + [Start the `dockercoins_webui` service container](01-01-docker/README.md#start-the-dockercoins_webui-service-container)
+    + [Start the `twkoins_webui` service container](01-01-docker/README.md#start-the-twkoins_webui-service-container)
   * [Cleanup](01-01-docker/README.md#cleanup)
 
 - [Docker Compose](01-02-compose/README.md#docker-compose)

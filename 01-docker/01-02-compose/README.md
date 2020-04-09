@@ -2,7 +2,7 @@
 
 ## Start
 
-In the start state, you are provided with the source code for the _dockercoins_ web frontend and all its backend components including `redis`.
+In the start state, you are provided with the source code for the _twkoins_ web frontend and all its backend components including `redis`.
 
 You will use **Docker Compose** to define and spin up an entire application stack declaratively.
 
@@ -79,11 +79,11 @@ The expected output is similar to this:
 ```output
       Name                     Command               State          Ports
 ---------------------------------------------------------------------------------
-dockercoins_hasher_1   ruby hasher.rb                   Up      0.0.0.0:8002->80/tcp
-dockercoins_redis_1    docker-entrypoint.sh redis ...   Up      6379/tcp
-dockercoins_rng_1      python rng.py                    Up      0.0.0.0:8001->80/tcp
-dockercoins_webui_1    node webui.js                    Up      0.0.0.0:8000->80/tcp
-dockercoins_worker_1   python worker.py                 Up
+twkoins_hasher_1   ruby hasher.rb                   Up      0.0.0.0:8002->80/tcp
+twkoins_redis_1    docker-entrypoint.sh redis ...   Up      6379/tcp
+twkoins_rng_1      python rng.py                    Up      0.0.0.0:8001->80/tcp
+twkoins_webui_1    node webui.js                    Up      0.0.0.0:8000->80/tcp
+twkoins_worker_1   python worker.py                 Up
 ```
 
 View the logs:
@@ -92,7 +92,7 @@ View the logs:
 docker-compose logs -f
 ```
 
-Look for the HTML tag `<h1>` in this file `webui/files/index.html` and change the title to `DockerCoins Miner`.
+Look for the HTML tag `<h1>` in this file `webui/files/index.html` and change the title to `twkoins Miner`.
 
 Refresh the page at [http://localhost:8000](http://localhost:8000). The change is immediate as we use a Docker volume between your host and the container.
 
