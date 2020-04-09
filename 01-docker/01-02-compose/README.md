@@ -6,16 +6,16 @@ In the start state, you are provided with the source code for the _dockercoins_ 
 
 You will use **Docker Compose** to define and spin up an entire application stack declaratively.
 
-Run `cd exercise/` and follow the instructions below to get started!
+Run `cd exercise/` and follow the instructions below to get started.
 
-## Create a Compose YAML file
+## Create a Compose file
 
 Docker Compose requires that you define an application stack in a YAML file (usually called `docker-compose.yml`)
 
 Create a `docker-compose.yml` file and paste the following contents into the file (`docker-compose.yml`):
 
 ```yaml
-version: "2"
+version: "3"
 
 services:
   rng:
@@ -60,25 +60,15 @@ volumes:
 - "./webui/files/:/files/"
 ```
 
-On Windows, to enable Docker volumes follow these steps:
-
-* As an admin, in a powershell Terminal, run:
-
-```console
-Set-NetConnectionProfile -interfacealias "vEthernet (DockerNAT)" -NetworkCategory Private
-```
-
-* In the Docker settings > Shared Drives, select your drive and click "Reset credentials", then "Apply". This will prompt you for your Windows credentials.
-
 Launch the stack in the background:
 
 ```console
 docker-compose up -d --build
 ```
 
-Verify that the app is working correctly: [http://localhost:8000](http://localhost:8000)
+Verify that the app is working correctly: <http://localhost:8000>
 
-Verify that all the services defined in the Docker compose file are running:
+Verify that all the services defined in the Docker Compose file are running:
 
 ```console
 docker-compose ps
@@ -111,17 +101,15 @@ Volumes are useful:
 * to keep data written by the container onto the host machine (typically generated application files, logs, database files)
 * to enable development workflows where everything runs in a close-to-production environment inside Docker, without a need for installing utilities (and the "right versions") on your developer machine
 
-**NOTE**:
-
-As you have probably noticed, the commands and options provided by the Docker compose CLI are very similar to the ones provided by the Docker CLI. You have almost learnt how to use Compose if you already know how to use the Docker CLI!
+**Note**: As you have probably noticed, the commands and options provided by the Docker Compose CLI are very similar to the ones provided by the Docker CLI. You have almost learnt how to use Compose if you already know how to use the Docker CLI!
 
 ## Container DNS names
 
-Looking at the code of the webui (`webui.js`), we did not use any IP or FQDN to reference the `redis` service. So how does each service know about each other?
+Looking at the code of the Web UI (`webui.js`), you'll notice we did not use any IP or FQDN to reference the `redis` service. So how does each service know about each other?
 
-The name `redis` itself is enough to resolve the newly created redis service. Compose effectively manages network aliases to make each service reachable by its own name. This is possible because Docker Compose provides an internal embedded dynamic DNS Server.
+The name `redis` itself is enough to resolve the newly created Redis service. Compose manages network aliases to make each service reachable by its own name. This is possible because Docker Compose configures DNS aliases in Docker.
 
-When reaching the host name `redis` from the `webui` service, the DNS automatically and successfully resolves `redis`! This can be observed by running:
+When requesting the host name `redis` from the `webui` service, the DNS automatically and successfully resolves `redis`! This can be observed by running:
 
 ```console
 docker-compose exec webui ping redis
@@ -129,7 +117,7 @@ docker-compose exec webui ping redis
 
 ## Scaling our app
 
-Docker compose `scale` command lets you scale up/down the number of container instances per service.
+Docker Compose's `scale` command lets you scale up/down the number of container instances per service.
 
 The mining speed currently maxes out at ~4 hashes per second.
 
@@ -155,7 +143,7 @@ It might not be your first choice if:
 
 * You need to perform orchestration steps other than just starting Docker containers
 * You need to wait or poll for events during orchestration
-* You want to manage your containers differently, e.g. using the **systemd** init system
+* You want to manage your containers differently, e.g. using the **systemd** init system to run a container as a background service
 * You want to ensure a desired state is maintained
 
 ## Cleanup

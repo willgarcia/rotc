@@ -38,6 +38,8 @@ Search the official Docker Hub for a Docker image that comes with NodeJS pre-ins
 docker search node
 ```
 
+You can also browse Docker Hub at [hub.docker.com](https://hub.docker.com).
+
 NOTE: the _docker search_ command currently only works with images in the public Docker Hub.
 
 Create a file called `Dockerfile` and paste the following content:
@@ -53,7 +55,7 @@ CMD ["node", "webui.js"]
 EXPOSE 80
 ```
 
-Notes about the _Dockerfile_ (refer to the <a href="https://docs.docker.com/reference/builder/" target="_blank">Dockerfile reference</a>) for more details):
+Notes about the _Dockerfile_ (refer to the [Dockerfile reference](https://docs.docker.com/reference/builder/)) for more details):
 
 - `FROM` specifies the base image to build our image upon (_node:10.11.0-alpine_ contains the NodeJS runtime)
 - `COPY` simply copies a file from the host file system to the image filesystem
@@ -78,14 +80,15 @@ docker images | grep dockercoins_webui
 
 Success!
 
-If you had a failed build along the way, you may also see an orphaned layer called `<none>` when running `docker images` (without grep). 
-Delete it by running `docker rmi <container-hash>`.
+If you had a failed build along the way, you may also see an orphaned layer called `<none>` when running `docker images` (without grep).
+There's no harm in it being there, but you can delete it by running `docker rmi <container-hash>`.
 
-**Note**
+#### Note
+
 - The build process is actually run by the Docker daemon and not the Docker CLI
 - When we run `docker build`, the entire directory content where the `Dockerfile` is located (known as the "context") is sent to the daemon.
-- If unnecessary files are present in the directory, use a `.dockerignore` file to ignore them. When large files are in the Docker context, builds can be slow.
-- If we create a new directory and only place the _Dockerfile_ and required files there, the build is quick and use less system resources.
+- If unnecessary files are present in the directory, use a `.dockerignore` file to ignore them. When large files are in the Docker context, builds can be slow, and any changed files in the context can invalidate Docker's build cache.
+- If we create a new directory and only place the _Dockerfile_ and required files there, the build is quick and uses less system resources.
 
 Docker images contain useful metadata which can be seen via the following command:
 
@@ -115,7 +118,8 @@ You have three main choices:
 
 - The public [Docker Hub](https://hub.docker.com/) registry
 - Run your own private [Docker registry](https://hub.docker.com/_/registry)
-- Use an hosted Docker registry like [Azure ACR](https://azure.microsoft.com/en-au/services/container-registry/)
+- Use an hosted Docker registry like [Azure ACR](https://azure.microsoft.com/en-au/services/container-registry/), [AWS ECR](https://aws.amazon.com/ecr/) or
+  [GCP Container Registry](https://cloud.google.com/container-registry/)
 
 ## Tagging and Publishing a Docker Image
 
@@ -133,7 +137,7 @@ From now on, we will use the **team name** as the version to tag all our Docker 
 
 Update the `TEAM_NAME` environment variable with your own team name in the following command and run it to tag the `dockercoins_webui` Docker image.
 
-If you are on Windows:
+If you are using PowerShell on Windows:
 
 ```console
 $env:TEAM_NAME="[team-name-placeholder]"
@@ -197,17 +201,17 @@ Run the following commands to remove the local `dockercoins_webui` images (inclu
 docker rmi -f dockercoins_webui
 
 # Windows only
-docker rmi -f k8straining.azurecr.io/dockercoins_webui:$env:TEAM_NAME
+docker rmi -f gcr.io/riseofthecontainerssydney/dockercoins_webui:$env:TEAM_NAME
 
 # MacOS only
-docker rmi -f k8straining.azurecr.io/dockercoins_webui:${TEAM_NAME}
+docker rmi -f gcr.io/riseofthecontainerssydney/dockercoins_webui:${TEAM_NAME}
 ```
 
 This will prove that we are pulling our published images and not just using our already present local images.
 
 ### Start the `dockercoins_webui` service container
 
-Before we execute our images, check to see if you have running containers.
+Before we execute our images, check to see if you have running containers:
 
 ```console
 docker ps
@@ -216,8 +220,6 @@ docker ps
 You should not see any running containers yet.
 
 To execute a container from a Docker image, you need to use the _docker run_ command. This will _fetch_ then _run_ the image. You can also fetch the image first using _docker pull_ then run it. Type _docker run --help_ to see available options.
-
-</div>
 
 Start the `dockercoins_webui` container with the following command:
 
@@ -229,16 +231,16 @@ docker run -d -p 3004:80 --name dockercoins_webui k8straining.azurecr.io/dockerc
 docker run -d -p 3004:80 --name dockercoins_webui k8straining.azurecr.io/dockercoins_webui:${TEAM_NAME}
 ```
 
-Open a browser to: [http://localhost/](http://localhost)
+Open a browser to: <http://localhost/>
 
 Review the options used with _docker run_:
 
 - `-d` runs the container in the background (i.e. "detached").
-- `-p XXXX:YYYY` maps a host port to the exposed container port so that the service can be accessed using the host address instead of the container's ephemeral address. Here `XXXX` is the host port and _YYYY_ is the container port.
+- `-p XXXX:YYYY` maps a host port to the exposed container port so that the service can be accessed using the host address instead of the container's ephemeral address. Here `XXXX` is the host port and `YYYY` is the container port.
 - `--name` is the container name - if we omit the name one will be generated for us (e.g. "admiring_euclid")
-- The last argument, i.e. `dockercoins_webui`, is the Docker image name (prefixed with our registry server address)
+- The last argument, eg. `dockercoins_webui`, is the Docker image name (prefixed with our registry server address)
 
-**Tip (optional) **: When launching multiple instances of the same image you would usually let Docker assign a random ephemeral port and a container name -- this avoids host port collisions and container name conflicts. Use the `-P` flag (capital _P_, without any port numbers) to let Docker assign an ephemeral port. Omit the `--name` parameter to let Docker assign a name for you
+**Tip (optional)**: When launching multiple instances of the same image you would usually let Docker assign a random ephemeral port and a container name -- this avoids host port collisions and container name conflicts. Use the `-P` flag (capital _P_, without any port numbers) to let Docker assign an ephemeral port. Omit the `--name` parameter to let Docker assign a name for you
 
 Check to see that the `dockercoins_webui` container is running:
 
@@ -285,7 +287,7 @@ Redis error { [Error: Redis connection to redis:6379 failed - getaddrinfo ENOTFO
 
 The problem is that the `dockercoins_webui` is configured to lookup the `redis` service by host name (`redis`) and port (`6379`) but there is no corresponding `redis` service running and no mechanism to do so yet.
 
-We will use Docker compose in part 2 to bring `redis` into our application stack!
+We will use Docker Compose in part 2 to bring `redis` into our application stack!
 
 ## Cleanup
 

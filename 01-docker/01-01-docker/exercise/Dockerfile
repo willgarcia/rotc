@@ -1,7 +1,6 @@
 FROM
-RUN npm install express
-RUN npm install redis
+RUN npm install express redis
 COPY files/ /files/
-COPY webui-dist.js /
+COPY webui.js /
 CMD ["node", "webui.js"]
 EXPOSE 80
