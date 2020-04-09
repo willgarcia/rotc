@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:10.11.0-alpine
 RUN npm install express redis
 COPY files/ /files/
 COPY webui.js /

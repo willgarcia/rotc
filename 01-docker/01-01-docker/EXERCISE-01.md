@@ -123,14 +123,14 @@ You have three main choices:
 
 ## Tagging and Publishing a Docker Image
 
-In this exercise you will publish your previously built Docker image to a private GCP Container Registry registry.
+In this exercise you will publish your previously built Docker image to a public Docker Hub Container Registry registry.
 
 Publishing is done via the `docker push` command. However, if you were to use that right now Docker would attempt to push your images to the public Docker Hub (and could fail as you may be not logged in the Docker Hub).
 
 ### Tag the Docker images
 
 To let Docker know you want to publish to our own registry, you need to _tag_ the image with the registry server location (_address:port_).
-The GCP registry created for this workshop is `gcr.io/riseofthecontainerssydney`.
+The GCP registry created for this workshop is `rotcaus/dockerfundamentals`.
 
 When tagging an image, a recommended practice is to add a version to the tag name.
 From now on, we will use the **team name** as the version to tag all our Docker images.
@@ -141,14 +141,14 @@ If you are using PowerShell on Windows:
 
 ```console
 $env:TEAM_NAME="[team-name-placeholder]"
-docker tag twkoins_webui gcr.io/riseofthecontainerssydney/twkoins_webui:$env:TEAM_NAME
+docker tag twkoins_webui rotcaus/twkoins_webui:$env:TEAM_NAME
 ```
 
 If you are on MacOS:
 
 ```console
-export TEAM_NAME="[team-name-placeholder]"
-docker tag twkoins_webui gcr.io/riseofthecontainerssydney/twkoins_webui:${TEAM_NAME}
+export TEAM_NAME="joe"
+docker tag twkoins_webui rotcaus/twkoins_webui:${TEAM_NAME}
 ```
 
 Check the image listing:
@@ -162,10 +162,31 @@ The expected output should be similar to this:
 ```output
 # ==> Outputs:
 twkoins_webui                                                    latest               34d55f835d15        31 minutes ago      218MB
-gcr.io/riseofthecontainerssydney/twkoins_webui                trainers             34d55f835d15        31 minutes ago      218MB
+rotcaus/twkoins_webui                trainers             34d55f835d15        31 minutes ago      218MB
 ```
 
 Note that tagging an image does not create a new image. It only creates another reference to the same image. This can be seen by the shared image IDs (3rd column in the console output).
+
+### Authenticate to the Docker Hub registry
+
+Docker HUB
+
+- Logout from your current user account:
+
+  ```bash
+  docker logout
+  ```
+
+- Use the rotcaus Docker account to login:
+
+  ```bash
+  # Ask for the password
+  echo "[account-password]" | docker login --username rotcaus --password-stdin
+  ```
+
+GCP
+
+If your push is denied, make sure you're logged in to GCP - run `gcloud auth login` and try again.
 
 ### Publish the Docker image
 
@@ -173,121 +194,14 @@ You can push the _twkoins_webui_ Docker image with the following commands:
 
 ```console
 # Windows only
-docker push gcr.io/riseofthecontainerssydney/twkoins_webui:$env:TEAM_NAME
+docker push rotcaus/twkoins_webui:$env:TEAM_NAME
 
 # MacOS only
-docker push gcr.io/riseofthecontainerssydney/twkoins_webui:${TEAM_NAME}
+docker push rotcaus/twkoins_webui:${TEAM_NAME}
 ```
 
 _This may take some time..._
 
-If your push is denied, make sure you're logged in to GCP - run `gcloud auth login` and try again.
+## Next steps
 
-## Running Docker Containers
-
-In this exercise, you create a running Docker container from your previously published Docker image.
-
-### Remove local Docker images
-
-Run the following commands to remove the local `twkoins_webui` images (including tagged versions):
-
-```console
-docker rmi -f twkoins_webui
-
-# Windows only
-docker rmi -f gcr.io/riseofthecontainerssydney/twkoins_webui:$env:TEAM_NAME
-
-# MacOS only
-docker rmi -f gcr.io/riseofthecontainerssydney/twkoins_webui:${TEAM_NAME}
-```
-
-This will prove that we are pulling our published images and not just using our already present local images.
-
-### Start the `twkoins_webui` service container
-
-Before we execute our images, check to see if you have running containers:
-
-```console
-docker ps
-```
-
-You should not see any running containers yet.
-
-To execute a container from a Docker image, you need to use the _docker run_ command. This will _fetch_ then _run_ the image. You can also fetch the image first using _docker pull_ then run it. Type _docker run --help_ to see available options.
-
-Start the `twkoins_webui` container with the following command:
-
-```console
-# Windows
-docker run -d -p 3004:80 --name twkoins_webui gcr.io/riseofthecontainerssydney/twkoins_webui:$env:TEAM_NAME
-
-# MacOS
-docker run -d -p 3004:80 --name twkoins_webui gcr.io/riseofthecontainerssydney/twkoins_webui:${TEAM_NAME}
-```
-
-Open a browser to: <http://localhost/>
-
-Review the options used with _docker run_:
-
-- `-d` runs the container in the background (i.e. "detached").
-- `-p XXXX:YYYY` maps a host port to the exposed container port so that the service can be accessed using the host address instead of the container's ephemeral address. Here `XXXX` is the host port and `YYYY` is the container port.
-- `--name` is the container name - if we omit the name one will be generated for us (e.g. "admiring_euclid")
-- The last argument, eg. `twkoins_webui`, is the Docker image name (prefixed with our registry server address)
-
-**Tip (optional)**: When launching multiple instances of the same image you would usually let Docker assign a random ephemeral port and a container name -- this avoids host port collisions and container name conflicts. Use the `-P` flag (capital _P_, without any port numbers) to let Docker assign an ephemeral port. Omit the `--name` parameter to let Docker assign a name for you
-
-Check to see that the `twkoins_webui` container is running:
-
-```console
-docker ps
-```
-
-View the port mapping (format is `[container_port] -> [host_ip]:[host_port]`):
-
-```console
-docker port twkoins_webui
-```
-
-You can use `docker exec` to execute a process within a running container.
-
-Take a peek at the running processes inside the `twkoins_webui` container:
-
-```console
-docker exec twkoins_webui ps -ef
-```
-
-```console
-docker exec -ti twkoins_webui bash -c "TERM=vt100 top -c"
-```
-
-...and (press `q` to exit)
-
-**Note**: Containers can also be paused/unpaused, stopped/started, restarted, killed, removed, and more. _kill_ is more harsh than _stop_, where Docker gives the container a grace period (default 10s) to exit.
-
-By looking at the UI, does the app work?
-
-No, it seems to be broken :( :( :(
-
-The logs might give us more info:
-
-```console
-docker logs --follow --tail=20 twkoins_webui
-```
-
-```output
-# ==> Output:
-Redis error { [Error: Redis connection to redis:6379 failed - getaddrinfo ENOTFOUND redis redis:6379]
-```
-
-The problem is that the `twkoins_webui` is configured to lookup the `redis` service by host name (`redis`) and port (`6379`) but there is no corresponding `redis` service running and no mechanism to do so yet.
-
-We will use Docker Compose in part 2 to bring `redis` into our application stack!
-
-## Cleanup
-
-For now, ensure that the previous `twkoins_webui` is stopped and removed.
-
-```console
-docker kill twkoins_webui
-docker rm twkoins_webui
-```
+[Exercise 02](EXERCISE-02.md)
