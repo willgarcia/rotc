@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-<title>DockerCoin Miner WebUI</title>
+<title>twkoin Miner WebUI</title>
 <link rel="stylesheet" type="text/css" href="rickshaw.min.css">
 <style>
 #graph {
@@ -51,7 +51,7 @@ function refresh () {
         }
         $("#speed").text("~" + speed.toFixed(1) + " hashes/second");
         var msg = ("I'm attending a @docker orchestration workshop, "
-                   + "and my #DockerCoins mining rig is crunching "
+                   + "and my #twkoins mining rig is crunching "
                    + speed.toFixed(1) + " hashes/second! W00T!");
         if (graph == null) {
             graph = new Rickshaw.Graph({
@@ -93,7 +93,7 @@ $(function () {
 </head>
 <body>
 
-<h1>DockerCoin Miner WebUI</h1>
+<h1>twkoin Miner WebUI</h1>
 
 <div id="graph"></div>
 
