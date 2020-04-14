@@ -5,7 +5,7 @@ In this part we introduce our existing `twkoins-webui` part of the twkoins servi
 We will:
 
 - Dockerise it by creating a Docker image for it
-- Publish it to a GCP Container Registry on Google Cloud
+- Publish it to our own Docker Hub Registry: https://hub.docker.com/repository/docker/rotcaus
 - Run our application's Web UI
 
 You will learn about:
