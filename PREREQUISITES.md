@@ -104,6 +104,20 @@ You might want to install the following Docker and Kubernetes extensions for cod
 
 ## Cloud tools
 
+Module 2 on Kubernetes will use a managed Kubernetes services provisioned in one of the following Cloud providers.
+
+Ask you trainers which platform you will be using and install the following CLI tools accordingly.
+
+### AWS
+
+   ```
+   # Windows
+   choco upgrade awscli
+
+   # MacOS
+   brew cask install awscli
+   ```
+
 ### Azure
 
    ```
