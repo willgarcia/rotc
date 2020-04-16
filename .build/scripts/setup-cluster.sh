@@ -6,7 +6,7 @@ SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$SCRIPT_PATH/../.."
 
 function main() {
-  gcloud container clusters get-credentials k8s-cluster --region australia-southeast1 --project riseofthecontainerssydney
+  gcloud container clusters get-credentials k8s-cluster --region australia-southeast1 --project riseofthecontainers
 
   runSetupForDirectory 02-02-k8s-app
   runSetupForDirectory 03-04-helm # This must run before 03-02, it contains the setup steps for installing Helm into the cluster.

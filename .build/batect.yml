@@ -14,7 +14,7 @@ containers:
         container: /var/run/docker.sock
     working_directory: /code
     environment:
-      CLOUDSDK_CORE_PROJECT: riseofthecontainerssydney
+      CLOUDSDK_CORE_PROJECT: riseofthecontainers
       CLOUDSDK_COMPUTE_REGION: australia-southeast1
       GOOGLE_BILLING_ACCOUNT_ID: TO-REPLACE
 
