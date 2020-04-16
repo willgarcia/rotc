@@ -16,7 +16,7 @@ containers:
     environment:
       CLOUDSDK_CORE_PROJECT: riseofthecontainerssydney
       CLOUDSDK_COMPUTE_REGION: australia-southeast1
-      GOOGLE_BILLING_ACCOUNT_ID: 011BAD-787BE0-783C44
+      GOOGLE_BILLING_ACCOUNT_ID: TO-REPLACE
 
 tasks:
   setup-gcp:
