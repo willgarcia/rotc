@@ -73,11 +73,11 @@ You might want to install the following Docker and Kubernetes extensions for cod
 
     ```console
     brew install \
+        minikube \
         kubernetes-cli \
         kubernetes-helm
 
     brew cask install \
-        minikube \
         virtualbox
     ```
 
