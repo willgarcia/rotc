@@ -1,0 +1,50 @@
+project_name: uber-k8s
+
+containers:
+  terraform:
+    build_directory: .batect/terraform
+    volumes:
+      - local: .
+        container: /code
+        options: cached
+      - local: .gcloud
+        container: /root/.config/gcloud
+        options: cached
+      - local: /var/run/docker.sock
+        container: /var/run/docker.sock
+    working_directory: /code
+    environment:
+      CLOUDSDK_CORE_PROJECT: riseofthecontainerssydney
+      CLOUDSDK_COMPUTE_REGION: australia-southeast1
+      GOOGLE_BILLING_ACCOUNT_ID: 011BAD-787BE0-783C44
+
+tasks:
+  setup-gcp:
+    description: Configure GCP connection.
+    run:
+      container: terraform
+      command: sh -c 'gcloud auth login && gcloud auth application-default login'
+
+  setup-terraform:
+    description: Initialise Terraform.
+    run:
+      container: terraform
+      command: scripts/initialize.sh
+
+  apply-terraform:
+    description: Run Terraform to provision infrastructure.
+    run:
+      container: terraform
+      command: terraform apply -input=false -auto-approve cluster
+
+  destroy-terraform:
+    description: Run Terraform to provision infrastructure.
+    run:
+      container: terraform
+      command: terraform destroy -input=false -auto-approve cluster
+
+  shell:
+    description: Run a shell in the Terraform environment.
+    run:
+      container: terraform
+      command: bash
