@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello
+  namespace:
+spec:
+  containers:
+  - name: hello
+    image: busybox
+    command: ["ping", "-c", "1000", "8.8.8.8"]
