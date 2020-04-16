@@ -23,6 +23,8 @@ Run to create infrastructure and every time you want to update the infrastructur
 
 * `./batect apply-terraform`
 
+Note: You may get errors relating to the cluster_node_version or cluster master version. To list the supported versions in GCP run `gcloud container get-server-config --zone australia-southeast1`. You then need to update the terraform `cluster.tf`
+
 Run to create and upload all artifacts used during exercises (eg. Docker images, Helm charts):
 
 * `./scripts/setup-cluster.sh`

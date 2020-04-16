@@ -1,3 +1,7 @@
+variable "kubernetes_version" {
+  default = "1.15.11-gke.5"
+}
+
 resource "google_project_service" "kubernetes_service" {
   provider = "google-beta"
 
@@ -17,8 +21,8 @@ resource "google_container_cluster" "cluster" {
   logging_service = "logging.googleapis.com/kubernetes"
   monitoring_service = "monitoring.googleapis.com/kubernetes"
 
-  min_master_version = "1.13.7-gke.8"
-  node_version = "1.13.7-gke.8"
+  min_master_version = var.kubernetes_version
+  node_version = var.kubernetes_version
 
   master_auth {
     // Disable basic authentication.
@@ -51,12 +55,12 @@ resource "google_container_node_pool" "node_pool" {
   location = google_container_cluster.cluster.location
 
   // This is per zone, so the cluster will have number of zones (eg. 3) x node_count nodes
-  node_count = 2
+  node_count = 1
 
-  version = "1.13.7-gke.8"
+  version = var.kubernetes_version
 
   node_config {
-    machine_type = "n1-standard-4"
+    machine_type = "n1-standard-2"
   }
 
   management {
