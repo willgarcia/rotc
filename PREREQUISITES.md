@@ -1,11 +1,13 @@
 # Prerequisites
 
-* For module 1 on Docker fundamentals, follow the instructions in the Docker section below. 
+* For module 1 on Docker fundamentals, follow the instructions in the Docker section below.
 * For module 2 on Kubernetes, follow the instructions in the Kubernetes section below.
+
+To create a local cluster or access a remote cluster created in Azure, GCP or AWS, follow the instructions in the Environment section below.
 
 ## Docker
 
-### Windows users 
+### Windows users
 
 1. Install Docker for Windows
 
@@ -40,56 +42,55 @@
 
     * Right-click the Docker icon in your notification area > Preferences > Shared Drives, select your drive and click "Reset credentials", then "Apply". This will prompt you for your Windows credentials.
 
-### MacOS users 
+### MacOS users
 
-1. Install Docker from <https://docs.docker.com/docker-for-mac/install/>
-2. Disable Kubernetes in the Docker preferences. Docker > Preferences > Kubernetes > (Uncheck) Enable Kubernetes.
+Install Docker from <https://docs.docker.com/docker-for-mac/install/>
 
 ## VSCode and extensions
 
 In addition to the software above, you'll need an editor like [Visual Studio Code](https://code.visualstudio.com/).
 You might want to install the following Docker and Kubernetes extensions for code completion and highlighting:
-- Cloud code: `code --install-extension googlecloudtools.cloudcode`
-- Docker: `code --install-extension ms-azuretools.vscode-docker`
-- YAML: `code --install-extension redhat.vscode-yaml`
 
+* Cloud code: `code --install-extension googlecloudtools.cloudcode`
+* Docker: `code --install-extension ms-azuretools.vscode-docker`
+* YAML: `code --install-extension redhat.vscode-yaml`
 
 ## Kubernetes
 
 ### Windows
 
-1. Disable Kubernetes in the Docker preferences. Right-click the Docker icon in your notification area > Preferences > Kubernetes > (Uncheck) Enable Kubernetes.
-2. Install the following packages with [Chocolatey](https://chocolatey.org):
+Install the following packages with [Chocolatey](https://chocolatey.org):
 
-    ```console
-    choco upgrade minikube
-    choco upgrade kubernetes-helm
-    choco upgrade kubernetes-cli
-    ```
+```console
+choco upgrade kubernetes-helm
+choco upgrade kubernetes-cli
+```
 
 ### MacOS
 
-   Install the following packages with [Homebrew](https://brew.sh):
+Install the following packages with [Homebrew](https://brew.sh):
+
+```console
+brew install kubernetes-cli kubernetes-helm
+```
+
+## Environment
+
+### Local cluster with minikube (optional)
+
+Disable Kubernetes in the Docker preferences. Docker > Preferences > Kubernetes > (Uncheck) Enable Kubernetes.
+
+* Install the following packages with [Homebrew](https://brew.sh) or [Chocolatey](https://chocolatey.org):
 
     ```console
-    brew install \
-        minikube \
-        kubernetes-cli \
-        kubernetes-helm
+    # Windows
+    choco upgrade minikube
 
-    brew cask install \
-        virtualbox
+    # MacOS
+    brew install minikube
+    brew cask install virtualbox
     ```
 
-   If this is your first time using VirtualBox, you will need to approve its kernel extension. Open VirtualBox from your Applications folder, then open System Preferences and go to Security & Privacy and switch to the General tab.
-
-   If there is a message that software from Oracle (the distributors of VirtualBox) has been blocked, you will need to click Allow and then restart your computer in order for VirtualBox to function correctly:
-   
-   ![image](https://developer.apple.com/library/archive/technotes/tn2459/Art/tn2459_approval.png)  
-
-
-### Local cluster with minikube
-    
 * Try to create a local test cluster with:
 
     ```console
@@ -100,9 +101,15 @@ You might want to install the following Docker and Kubernetes extensions for cod
     minikube start -p k8scluster
     ```
 
+   If this is your first time using VirtualBox, you will need to approve its kernel extension. Open VirtualBox from your Applications folder, then open System Preferences and go to Security & Privacy and switch to the General tab.
+
+   If there is a message that software from Oracle (the distributors of VirtualBox) has been blocked, you will need to click Allow and then restart your computer in order for VirtualBox to function correctly:
+
+   ![image](https://developer.apple.com/library/archive/technotes/tn2459/Art/tn2459_approval.png)  
+
 * If this succeeds, delete the cluster with `minikube delete -p k8scluster`.
 
-## Cloud tools
+### Cloud tools for accessing an existing remote Kubernetes cluster
 
 Module 2 on Kubernetes will use a managed Kubernetes services provisioned in one of the following Cloud providers.
 
@@ -110,7 +117,7 @@ Ask you trainers which platform you will be using and install the following CLI 
 
 ### AWS
 
-   ```
+   ```bash
    # Windows
    choco upgrade awscli
 
@@ -120,7 +127,7 @@ Ask you trainers which platform you will be using and install the following CLI 
 
 ### Azure
 
-   ```
+   ```bash
    # Windows
    choco upgrade azure-cli
 
@@ -128,9 +135,9 @@ Ask you trainers which platform you will be using and install the following CLI 
    brew cask install azure-cli
    ```
 
-### GCP 
+### GCP
 
-   ```
+   ```bash
    # Windows
    choco upgrade gcloudsdk
 
