@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+REGISTRY=k8straining
+
+function dockerTag() {
+    LOCAL_IMAGE=$1
+    REMOTE_IMAGE=$2
+    docker tag ${LOCAL_IMAGE} ${REGISTRY}/${REMOTE_IMAGE}:v1
+    docker push ${REGISTRY}/${REMOTE_IMAGE}:v1
+}
+
+docker-compose build
+
+dockerTag "solution_webui" "dockercoins_webui"
+dockerTag "solution_worker" "dockercoins_worker"
+dockerTag "solution_hasher" "dockercoins_hasher"
+dockerTag "solution_rng" "dockercoins_rng"
