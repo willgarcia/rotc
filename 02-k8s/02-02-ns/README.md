@@ -50,7 +50,7 @@ kubectl config set-context --current --namespace=$env:TEAM_NAME
 kubectl config set-context --current --namespace=${TEAM_NAME}
 ```
 
-A namespace is an object type and we could have created with a YAML definition instead of using the `kubectl create` command.
+A namespace is an object type which we could have created with a YAML definition instead of using the `kubectl create` command.
 
 Dump the current namespace with:
 
