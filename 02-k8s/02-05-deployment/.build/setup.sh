@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-REGISTRY=gcr.io/rotcaus
+REGISTRY=rotcaus
 
 function dockerTag() {
     LOCAL_IMAGE=$1

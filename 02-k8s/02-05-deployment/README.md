@@ -14,9 +14,9 @@ You will learn about:
 
 In the start state, you are provided with the following Docker images:
 
-- `gcr.io/rotcaus/dockercoins_webui`
-- `gcr.io/rotcaus/dockercoins_rng`
-- `gcr.io/rotcaus/dockercoins_hasher`
+- `rotcaus/dockercoins_webui`
+- `rotcaus/dockercoins_rng`
+- `rotcaus/dockercoins_hasher`
 
 Run `cd exercise/` and follow the instructions below to get started!
 
@@ -146,18 +146,18 @@ spec:
     spec:
       containers:
       - name: rng
-        image: gcr.io/rotcaus/dockercoins_rng:v1
+        image: rotcaus/dockercoins_rng:v1
         imagePullPolicy: Always
       - name: hasher
-        image: gcr.io/rotcaus/dockercoins_hasher:v1
+        image: rotcaus/dockercoins_hasher:v1
         imagePullPolicy: Always
       - name: webui
-        image: gcr.io/rotcaus/dockercoins_webui:v1
+        image: rotcaus/dockercoins_webui:v1
         imagePullPolicy: Always
         ports:
         - containerPort: 80
       - name: worker
-        image: gcr.io/rotcaus/dockercoins_worker:v1
+        image: rotcaus/dockercoins_worker:v1
         imagePullPolicy: Always
       - name: redis
         image: redis
