@@ -1,20 +1,26 @@
 # Pods
 
-## Get details on a pod
+## Create a pod
 
-Knowing where pods are running is handy when debugging an application. Add the `-o wide` option to the `kubectl get pods` command to show the namespace name and node name:
+In the exercise folder, run the following command to create your first pod:
 
-```console
-kubectl get pods --all-namespaces -o wide
+```bash
+kubectl apply -f pod.yml
 ```
 
-This command outputs the name of the pods present on the node. To get more details on a pod, use the `kubectl describe` command:
+## Verify that the pod is created
+
+Use the `kubectl describe` command to verify the status of the pod:
 
 ```console
-kubectl describe pod fluentd-gcp-v3.1.1-6sdr8 -n kube-system
+kubectl describe pod dockercoins
 ```
 
-The output provides all the information associated to the pod:
+This pod runs multiple containers, the `Events` section will list a log of all the events associated to all the containers running the pod.
+
+If a pod fails, the `Events` section will show the failure reason. A common failure reason is when the Docker image does not exist.
+
+The output also provides the following information:
 
 - `Start Time`: the time the pod started
 - `Labels`: additional key/value data associated with the pod
@@ -25,64 +31,23 @@ The output provides all the information associated to the pod:
 - `Containers > Command`: the Docker command as specified when creating the pod
 - `Containers > Liveness`: the result of the health check specified when creating the pod
 
-### Desired state - Try to break your cluster :o
+## Get the logs of the pod
 
-When listing all the pods in your cluster, you have probably noticed the value `1/1` in the READY column. This indicates that Kubernetes has managed to create the desired state for all the pods:
-
-- 1 pod is expected to be running
-- 1 pod is effectively running.
-
-We will dig into this topic in the next exercises about `replicas`, but for now try to delete a pod with this command:
+To access the logs of the containers running in the pod, run this command:
 
 ```console
-kubectl delete pod fluentd-gcp-v3.1.1-rwhlv -n kube-system
+kubectl logs pod/dockercoins
 ```
 
-Run the `kubectl get pods --all-namespaces` to list your pods.
-
-The output will show that the `fluentd-gcp-v3.1.1-rwhlv` pod has been re-created under a different name to guarantee the desired state of "2".
-
-The output below shows the pod was created 11 seconds ago, indicating that it has been recreated recently:
-
-```output
-NAMESPACE     NAME                               READY   STATUS    RESTARTS   AGE
-...
-kube-system   fluentd-gcp-v3.1.1-2jzpx            1/1     Running   0          11s
-...
-```
-
-### Work with all the resource types in the cluster
-
-We have been using the `kubectl get` and `kubectl describe` actions to know more about a few component types (`nodes`, `namespaces` and `pods`) deployed in the cluster.
-
-Now that we are more familiar on how to use these commands, we can re-use them to look for any object type and to list all the actions possible on them.
-
-The following command list of the objects/actions possible in the cluster:
+Given this pod has more than one container, you need to specify which container you want to get the logs from:
 
 ```console
-kubectl api-resources -o wide
+kubectl logs pod/dockercoins [rng hasher webui worker redis]
 ```
 
-Pick one resource type (KIND column) and run this command:
+The name of each container is defined in the pod YAML definition.
 
-```console
-kubectl explain [kind-name]
-```
+### Useful links
 
-The kubectl command `explain` provides a definition of what the object does, and its main fields.
-
-### kubectl verbose mode / debugging
-
-If you are curious about which API endpoints kubectl calls, the verbose option `--v` enables more verbose output from `kubectl`.
-
-For example, level 6 lists all the HTTP calls and their response codes:
-
-```console
-kubectl get pods --v 6
-```
-
-This option is not frequently used but when used with the value `8`, kubectl will output not only the HTTP requests as well as the responses:
-
-```console
-kubectl get pods --v 8
-```
+* [Stern - Multi pod and container log tailing for Kubernetes
+](https://github.com/wercker/stern)
