@@ -47,6 +47,12 @@ kubectl logs pod/dockercoins [rng hasher webui worker redis]
 
 The name of each container is defined in the pod YAML definition.
 
+## Delete the pod
+
+```bash
+kubectl delete -f pod.yml
+```
+
 ### Useful links
 
 * [Stern - Multi pod and container log tailing for Kubernetes
