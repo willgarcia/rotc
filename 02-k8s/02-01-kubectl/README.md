@@ -7,6 +7,27 @@ You will learn about:
 - Kubernetes' main components
 - kubectl, the Kubernetes CLI client used to interact with any Kubernetes cluster
 
+
+## Setup
+We have configured an existing Kubernetes cluster that is running on the Google Cloud Platform (GCP).
+
+    ```bash
+    # Windows
+    choco upgrade gcloudsdk
+
+    # MacOS
+    brew cask install google-cloud-sdk
+    ```
+
+
+    ```bash
+    gcloud auth login
+    gcloud auth application-default login
+
+    # Set the current Project
+    gcloud config set project rotc-22-04
+    ```
+
 ## Start
 
 No code provided. We will only use terminal command lines to access a remote cluster!
@@ -42,6 +63,8 @@ kubectl proxy --port=8080
 
 You can then access the Kubernetes API at <http://localhost:8080/>
 
+Ctrl+C to stop the port forwarding.
+
 ### Helpful links
 
 - [Kubernetes releases and binaries](https://github.com/kubernetes/kubernetes/releases/latest)
@@ -68,19 +91,24 @@ gke-k8s-cluster-default-node-pool-e61f3b84-f9h6   Ready    <none>   3d21h   v1.1
 gke-k8s-cluster-default-node-pool-ffbb1244-ghkc   Ready    <none>   3d21h   v1.15.11-gke.5
 ```
 
-In a production scenario, the master typically does not execute pods because its components are _tainted_. Pods tolerate rules known as [taints and tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) to repel/evict work.
+In a production scenario, the master typically does not execute pods.
 
-When looking at the master node `spec` in our cluster, we can see that no taint has been defined. Run the following command to get the node `spec`:
+Any Kubernetes Object can be inspected via the kubectl command line.
+Below is an example.
 
 ```console
-kubectl get nodes -o json
+kubectl get nodes -o yaml
 ```
+
+There may be a lot of output but have a look at the top of the definition there is a `spec:` section.
 
 Wait, what is the `spec`?
 
-The spec describe how we want this object to be. If the spec is updated on an object, Kubernetes will reconcile the current state with the spec and take a series of actions (through the controller) to converge to this declared state.
+The spec describe how we want this object to be. It is the definition that you supply when defining Kubernetes Objects. This is what is likely stored in version control. 
 
-If you look at `items.status.images` JSON entry in this output, you will also find all the Docker images that are known by the node. These have been downloaded, stored on the master node and can be used now to create/recreate containers and pods in the node, just like we did in our previous exercises with the DockerCoin Docker images.
+If the spec is updated on an object, Kubernetes will reconcile the current state with the spec and take a series of actions (through the controller) to converge to this declared state.
+
+If you look at `images` YAML entry in this output, you will also find all the Docker images that are known by the node. These have been downloaded, stored on the master node and can be used now to create/recreate containers and pods in the node.
 
 ### Listing the pods of the cluster
 
@@ -125,6 +153,11 @@ kube-system   stackdriver-metadata-agent-cluster-level-c678bc98d-j5sbz     2/2  
 Finally, there is one component that is typically only present on worker nodes:
 
 - `kube-proxy`: load balances traffic between applications within a node
+
+
+These above pods are what is needed by Kubernetes to operate.
+
+In the next exercise we will create our own custom Pods to run an application.
 
 ### Links
 
