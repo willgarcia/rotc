@@ -1,2 +1,2 @@
 *.terraform
-*.gcloud
+.build/.gcloud/*
