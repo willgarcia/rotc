@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: dockercoins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dockercoins
+  template:
+    metadata:
+      labels:
+        app: dockercoins
+    spec:
+      containers:
+      - name: rng
+        image: rotcaus/dockercoins_rng:v1
+        imagePullPolicy: Always
+      - name: hasher
+        image: rotcaus/dockercoins_hasher:v1
+        imagePullPolicy: Always
+      - name: webui
+        image: rotcaus/dockercoins_webui:v1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+      - name: worker
+        image: rotcaus/dockercoins_worker:v1
+        imagePullPolicy: Always
+      - name: redis
+        image: redis
