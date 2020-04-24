@@ -13,3 +13,7 @@
 * `kubectl` CLI reference: <https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#expose> 
 * `kubectl` Cheat sheet: <https://kubernetes.io/docs/reference/kubectl/cheatsheet/>
 
+## Contributions
+
+Sample app - code under [Apache License 2.0](https://github.com/jpetazzo/container.training/blob/master/LICENSE)
+
