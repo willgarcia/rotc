@@ -15,5 +15,5 @@
 
 ## Contributions
 
-Sample app - code under [Apache License 2.0](https://github.com/jpetazzo/container.training/blob/master/LICENSE)
+Sample app from Jérôme Petazzoni - code under [Apache License 2.0](https://github.com/jpetazzo/container.training/blob/master/LICENSE)
 
