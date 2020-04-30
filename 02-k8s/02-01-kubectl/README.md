@@ -26,6 +26,8 @@ We have configured an existing Kubernetes cluster that is running on the Google 
 
     # Set the current Project
     gcloud config set project rotc-22-04
+
+    gcloud container clusters get-credentials k8s-cluster --region australia-southeast1 --project rotc-22-04
     ```
 
 ## Start
