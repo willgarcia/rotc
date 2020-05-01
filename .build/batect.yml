@@ -35,7 +35,7 @@ tasks:
     description: Run Terraform to provision infrastructure.
     run:
       container: terraform
-      command: terraform apply -input=false -auto-approve cluster
+      command: sh -c 'terraform plan -out tf.plan cluster && terraform apply -input=false -auto-approve tf.plan'
 
   destroy-terraform:
     description: Run Terraform to provision infrastructure.
