@@ -60,7 +60,7 @@ resource "google_container_cluster" "cluster" {
   }
 
   remove_default_node_pool = true
-  initial_node_count = 1
+  initial_node_count = 2
 
   ip_allocation_policy {
     create_subnetwork = true
@@ -74,7 +74,7 @@ resource "google_container_node_pool" "node_pool" {
   location = google_container_cluster.cluster.location
 
   // This is per zone, so the cluster will have number of zones (eg. 3) x node_count nodes
-  node_count = 1
+  node_count = 2
 
   version = var.kubernetes_version
 
