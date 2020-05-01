@@ -19,7 +19,7 @@ resource "google_project_service" "kubernetes_service" {
 
   project = data.google_client_config.current.project
   service = "container.googleapis.com"
-  disable_dependent_services = false
+  disable_dependent_services = true
 }
 
 resource "google_container_cluster" "cluster" {
@@ -49,8 +49,13 @@ resource "google_container_cluster" "cluster" {
   }
 
   addons_config {
-    kubernetes_dashboard {
-      disabled = true
+
+    istio_config {
+      disabled = false
+    }
+
+    cloudrun_config {
+      disabled = false
     }
   }
 
