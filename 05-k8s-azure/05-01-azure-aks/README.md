@@ -1,4 +1,4 @@
-# 04-01 Azure Kubernetes Service (AKS) cluster
+# 05-01 Azure Kubernetes Service (AKS) cluster
 
 You will learn about:
 
@@ -33,7 +33,7 @@ The output should be similar to this:
 ```output
 CURRENT   NAME             CLUSTER          AUTHINFO                                NAMESPACE
           k8scluster        k8scluster        k8scluster
-*         rotcaus-aks   rotcaus-aks   clusterUser_k8straining_k8straining-aks   team-trainers
+*         rotcaus-aks   rotcaus-aks   clusterUser_rotcaus_rotcaus-aks   team-trainers
 ```
 
 If the current context is not `rotcaus-aks`, change it with `kubectl config use-context rotcaus-aks`
@@ -101,7 +101,7 @@ The output should be similar to this:
 ```output
 CURRENT   NAME             CLUSTER          AUTHINFO                                NAMESPACE
           k8scluster        k8scluster        k8scluster
-*         rotcaus-aks   rotcaus-aks   clusterUser_k8straining_k8straining-aks   my-namespace
+*         rotcaus-aks   rotcaus-aks   clusterUser_rotcaus_rotcaus-aks   my-namespace
 ```
 
 NOTE: Controlling the access to a cluster is not covered here. If you are interested in knowning more about the authentication mechanisms, please read:

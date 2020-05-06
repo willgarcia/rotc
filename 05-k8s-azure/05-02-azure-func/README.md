@@ -1,4 +1,4 @@
-# 04-02 Azure Function Core Tools
+# 05-02 Azure Function Core Tools
 
 You will learn about deploying a simple app to AKS with the Azure Functions core tools
 
