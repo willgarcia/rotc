@@ -14,9 +14,12 @@ containers:
         container: /var/run/docker.sock
     working_directory: /code
     environment:
-      CLOUDSDK_CORE_PROJECT: riseofthecontainers
+      CLUSTER_NAME: k8s-cluster
+      CLUSTER_VERSION: 1.15.11-gke.5
+      CLUSTER_LOCATION: australia-southeast1-a
       CLOUDSDK_COMPUTE_REGION: australia-southeast1
-      GOOGLE_BILLING_ACCOUNT_ID: TO-REPLACE
+      CLOUDSDK_CORE_PROJECT: [YOUR_PROJECT_NAME]
+      GOOGLE_BILLING_ACCOUNT_ID: [YOUR_BILLING_ID]
 
 tasks:
   setup-gcp:
@@ -35,7 +38,17 @@ tasks:
     description: Run Terraform to provision infrastructure.
     run:
       container: terraform
-      command: sh -c 'terraform plan -out tf.plan cluster && terraform apply -input=false -auto-approve tf.plan'
+      command: sh -c "terraform plan
+                        -input=false
+                        -var=cluster_location=${CLUSTER_LOCATION}
+                        -var=cluster_name=${CLUSTER_NAME}
+                        -var=cluster_version=${CLUSTER_VERSION}
+                        -var=subnet_region=${CLOUDSDK_COMPUTE_REGION}
+                        -out tf.plan
+                        cluster &&
+                      terraform apply
+                        -input=false
+                        -auto-approve tf.plan"
 
   destroy-terraform:
     description: Run Terraform to provision infrastructure.
