@@ -21,8 +21,9 @@ containers:
       CLUSTER_VERSION: 1.15.11-gke.5
       CLUSTER_LOCATION: australia-southeast1-a
       CLOUDSDK_COMPUTE_REGION: australia-southeast1
-      CLOUDSDK_CORE_PROJECT: [YOUR_PROJECT_NAME]
-      GOOGLE_BILLING_ACCOUNT_ID: [YOUR_BILLING_ID]
+      # CLOUDSDK_CORE_PROJECT: rotcaus
+      CLOUDSDK_CORE_PROJECT: servicemeshlab
+      GOOGLE_BILLING_ACCOUNT_ID: 01A73F-4983F0-0FC3DE
 
 tasks:
   setup-gcp:
@@ -38,29 +39,19 @@ tasks:
       command: scripts/initialize.sh
 
   apply-terraform:
-    description: Run Terraform to provision infrastructure.
+    description: Run Terraform and post-install tasks to provision infrastructure.
     run:
       container: terraform
-      command: sh -c "terraform plan
-                        -input=false
-                        -var=cluster_location=${CLUSTER_LOCATION}
-                        -var=cluster_name=${CLUSTER_NAME}
-                        -var=cluster_version=${CLUSTER_VERSION}
-                        -var=subnet_region=${CLOUDSDK_COMPUTE_REGION}
-                        -out tf.plan
-                        cluster &&
-                      terraform apply
-                        -input=false
-                        -auto-approve tf.plan"
+      command: scripts/apply-terraform.sh
 
   destroy-terraform:
-    description: Run Terraform to provision infrastructure.
+    description: Run Terraform to decommission infrastructure.
     run:
       container: terraform
       command: terraform destroy -input=false -auto-approve cluster
 
   cluster-auth:
-    description: Get credential to access the newly created Kubernetes cluster
+    description: Get credentials to access the newly created Kubernetes cluster
     run:
       container: terraform
       command: sh -c "gcloud container clusters get-credentials "${CLUSTER_NAME}" --region "${CLUSTER_LOCATION}" --project ${CLOUDSDK_CORE_PROJECT}"
@@ -76,4 +67,3 @@ tasks:
     run:
       container: terraform
       command: scripts/grafana.sh
-

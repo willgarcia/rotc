@@ -31,6 +31,12 @@ Note: You may get errors relating to the cluster_node_version or cluster master 
 ./batect cluster-auth
 ```
 
+* Run to create and upload all artifacts used during exercises (eg. Docker images, Helm charts):
+
+Install gsutil from <https://cloud.google.com/storage/docs/gsutil_install> and run:
+
+`./scripts/post-install.sh`
+
 ## Post-workshop
 
 Destroy all created resources with `./batect destroy-terraform`, and optionally delete the project from the GCP console (note that you will not be able to re-use the project ID for 30 days).
