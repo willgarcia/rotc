@@ -28,7 +28,7 @@ resource "google_container_cluster" "cluster" {
   depends_on = [google_project_service.kubernetes_service]
 
   name = "k8s-cluster"
-  location = "australia-southeast1"
+  location = "australia-southeast1-a"
 
   logging_service = "logging.googleapis.com/kubernetes"
   monitoring_service = "monitoring.googleapis.com/kubernetes"
@@ -60,7 +60,7 @@ resource "google_container_cluster" "cluster" {
   }
 
   remove_default_node_pool = true
-  initial_node_count = 2
+  initial_node_count = 1
 
   ip_allocation_policy {
     create_subnetwork = true
@@ -74,7 +74,7 @@ resource "google_container_node_pool" "node_pool" {
   location = google_container_cluster.cluster.location
 
   // This is per zone, so the cluster will have number of zones (eg. 3) x node_count nodes
-  node_count = 2
+  node_count = 1
 
   version = var.kubernetes_version
 
