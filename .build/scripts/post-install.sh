@@ -2,6 +2,13 @@
 
 set -euo pipefail
 
+# Build and push v2 image of webui (earlier versions are done as part of setup for 02-02
+DOCKER_REPO=rotcaus
+cd ../04-observability/04-01-prometheus/exercise/webui
+docker build . -t ${DOCKER_REPO}/dockercoins_webui:v2
+docker push ${DOCKER_REPO}/dockercoins_webui:v2
+cd -
+
 # Upload Helm chart to our repo
 HELM_REPO=servicemeshlab
 
