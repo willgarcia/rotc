@@ -13,3 +13,14 @@ provider "null" {
 provider "local" {
   version = "~> 1.3"
 }
+
+provider "helm" {
+  version = "~> 1.1"
+  kubernetes {
+    config_path = "/root/.kube/config"
+  }
+}
+
+provider "kubernetes" {
+  version = "~> 1.11"
+}

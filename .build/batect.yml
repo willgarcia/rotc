@@ -7,6 +7,9 @@ containers:
       - local: .
         container: /code
         options: cached
+      - local: ~/.kube/config
+        container: /root/.kube/config
+        options: cached
       - local: .gcloud
         container: /root/.config/gcloud
         options: cached
