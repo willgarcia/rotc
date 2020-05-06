@@ -34,15 +34,41 @@ Helm charts can be installed from and stored in repositories. Tools like Artifac
 
 Helm charts also provide ways to configure the applications with default values or overrides making them customisable.
 
+## Install the Helm CLI
+
+### Windows
+
+Install the following packages with [Chocolatey](https://chocolatey.org):
+
+  ```console
+  choco upgrade kubernetes-helm
+  ```
+
+### MacOS
+
+Install the following packages with [Homebrew](https://brew.sh):
+
+  ```console
+  brew install kubernetes-helm
+  ```
+
 ## Installing a Helm chart from a public repository
 
 To get familiar with the Helm CLI, we are going to install the `metabase` application in our cluster.
 
+We first need to add the official Helm chart repository to our list of available repositories:
+
+```console
+helm repo add stable https://kubernetes-charts.storage.googleapis.com
+```
+
 Let's search for it in the public stable chart repository with:
 
 ```console
-helm search metabase
+helm search repo metabase
 ```
+
+A complete list of all the available charts is also available at <https://github.com/helm/charts/tree/master/stable> or with `helm search repo`.
 
 The name of the metabase chart is `stable/metabase`. Download it to look at its content:
 
@@ -81,10 +107,10 @@ Install `stable/metabase` in the cluster with:
 
 ```console
 # Windows only
-helm install stable/metabase --name $env:RELEASE_NAME
+helm install $env:RELEASE_NAME stable/metabase
 
 # MacOS only
-helm install stable/metabase --name $RELEASE_NAME
+helm install $RELEASE_NAME stable/metabase
 ```
 
 Helm keeps track of the version installed by creating releases, which we can see by running:
@@ -104,28 +130,38 @@ Wait for the chart to be installed and follow the instructions in the NOTES:
 
 ```console
 # Windows only
-$env:POD_NAME=$(kubectl get pods --namespace $env:NAMESPACE -l "app=metabase,release=$env:RELEASE_NAME" -o jsonpath="{.items[0].metadata.name}")
+export POD_NAME=$(kubectl get pods --namespace will -l "app=metabase,release=v1-metabase" -o jsonpath="{.items[0].metadata.name}")
+echo "Visit http://127.0.0.1:8080 to use your application"
 kubectl port-forward --namespace $env:NAMESPACE $POD_NAME 8080:3000
 
 # MacOS only
-export POD_NAME=$(kubectl get pods --namespace ${NAMESPACE} -l "app=metabase,release=$RELEASE_NAME" -o jsonpath="{.items[0].metadata.name}")
+export POD_NAME=$(kubectl get pods --namespace will -l "app=metabase,release=v1-metabase" -o jsonpath="{.items[0].metadata.name}")
+echo "Visit http://127.0.0.1:8080 to use your application"
 kubectl port-forward --namespace ${NAMESPACE} $POD_NAME 8080:3000
 ```
 
 Access metabase on `http://127.0.0.1:8080`!
 
-We're using `kubectl port-forward` here to proxy traffic from port 8080 on our local machine to port 3000 on the metabase container. This is
-another useful debugging tool and is not limited to pods created with Helm. 
+We're using `kubectl port-forward` here to proxy the Kubernetes traffic of the metabase container 
+
+* from the internal port 8080
+* to our local machine on port 3000
+
+This is another useful debugging tool and is not limited to pods created with Helm.
+
+Exit the port-forwarding command with `CRTL-C`.
 
 Let's delete our release before deploying another application:
 
 ```console
 # Windows only
-helm delete --purge $env:RELEASE_NAME
+helm delete $env:RELEASE_NAME
 
 # MacOS only
-helm delete --purge $RELEASE_NAME
+helm delete $RELEASE_NAME
 ```
+
+The metabase application has been undeployed.
 
 ## Why use Helm charts?
 
@@ -208,7 +244,7 @@ kubectl apply -f dockercoins-v1.yaml
 ```
 
 When working with multiple applications, maintaining these YAML templates for each resource (Service, Deployment, ServiceAccount, Volumes, ConfigMaps etc.)
-tends to become a tedious task :(
+... tends to become a tedious task :(
 
 The approach of forking/versioning templates per context/per environment is an option but generally leads to an explosion of the number of templates which does not scale well and quickly becomes difficult to manage.
 
@@ -226,6 +262,7 @@ So, what are the benefits of using a package manager?
 We are not going to create the `DockerCoins` chart from scratch. However, for learning purposes, create a new chart to see what the default skeleton of a chart looks like:
 
 ```console
+cd exercise/
 helm create dockercoins
 ```
 
@@ -239,7 +276,7 @@ The structure of the chart is as following:
 To transform our Kubernetes YAML definitions present in `dockercoins-v1.yaml` into a Helm chart, we would have to:
 
 * move the `demo/dockercoins-v1.yaml` into the templates folder
-* templatise any attribute in the YAML that we want make dynamic. For example, if we want to make the Redis image name and version dynamic, so that we can upgrade Redis in the future, we would change this static definition from:
+* templatise any attribute in the YAML that we want to make dynamic. For example, if we want to make the Redis image name and version dynamic, so that we can upgrade Redis in the future, we would change this static definition from:
 
 ```console
   - name: redis
@@ -273,27 +310,26 @@ We've set up one for you using Google Cloud Storage (similar to AWS S3), but too
 Add the `rotcaus` repository to the list of Helm repositories on your machine:
 
 ```console
-helm repo add rotcaus https://riseofthecontainerssydney-helm.storage.googleapis.com
+helm repo add rotcaus https://rotcaus-helm.storage.googleapis.com
 ```
 
 Update the local repository index and list all the charts available in the newly added repository:
 
 ```console
 helm repo update
-helm search rotcaus/
+helm search repo rotcaus
 ```
 
 The output should be similar to this:
 
 ```console
-NAME                   	CHART VERSION	APP VERSION	DESCRIPTION
-rotcaus/dockercoins	0.1.0        	1.0        	A Helm chart for Kubernetes
-```
+NAME                    CHART VERSION   APP VERSION     DESCRIPTION                
+rotcaus/dockercoins     0.1.0           1.0             A Helm chart for Kubernetes```
 
 Inspect the chart to show its metadata and the possible values that can be configured on it:
 
 ```console
-helm inspect rotcaus/dockercoins
+helm inspect chart rotcaus/dockercoins
 ```
 
 In this previous command `rotcaus` is the name of the Helm repository we added earlier and `dockercoins` the name of the chart.
@@ -307,11 +343,11 @@ Install the chart in Kubernetes by running:
 ```console
 # Windows only
 $env:RELEASE_NAME=$env:NAMESPACE + "-coins"
-helm install --wait rotcaus/dockercoins --version 0.1.0 --name $env:RELEASE_NAME
+helm install --wait $env:RELEASE_NAME rotcaus/dockercoins --version 0.1.0
 
 # MacOS only
-export RELEASE_NAME="NAMESPACE-coins"
-helm install --wait rotcaus/dockercoins --version 0.1.0 --name $RELEASE_NAME
+export RELEASE_NAME="$NAMESPACE-coins"
+helm install --wait $RELEASE_NAME rotcaus/dockercoins --version 0.1.0
 ```
 
 This may take a few moments.
@@ -320,21 +356,21 @@ Once the chart is installed, you should be able to access it by its public IP. A
 
 ```console
 # Windows only
-kubectl get svc --namespace $env:NAMESPACE -w
+kubectl get svc -w
 
 # MacOS only
-kubectl get svc --namespace $NAMESPACE -w
+kubectl get svc -w
 ```
 
 Once the column IP goes from pending to an available IP, do `Ctrl+C` and access the app with:
 
 ```console
 # Windows only
-$env:SERVICE_IP=$(kubectl get svc --namespace $env:NAMESPACE ${env:RELEASE_NAME}-dockercoins -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+$env:SERVICE_IP=$(kubectl get svc ${env:RELEASE_NAME}-dockercoins -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 echo http://$env:SERVICE_IP:80
 
 # MacOS only
-export SERVICE_IP=$(kubectl get svc --namespace $NAMESPACE $RELEASE_NAME-dockercoins -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+export SERVICE_IP=$(kubectl get svc $RELEASE_NAME-dockercoins -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 echo http://$SERVICE_IP:80
 ```
 
@@ -344,11 +380,9 @@ Run the following command and keep it open in a separate terminal. This will giv
 
 ```console
 # Windows only
-$env:SERVICE_IP=$(kubectl get svc --namespace $env:NAMESPACE ${env:RELEASE_NAME}-dockercoins -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 while ($true) {start-sleep 1;(iwr http://$env:SERVICE_IP/info).content;}
 
 # MacOS only
-export SERVICE_IP=$(kubectl get svc --namespace $NAMESPACE $RELEASE_NAME-dockercoins -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 while sleep 1; do echo -e && curl http://$SERVICE_IP/info; done
 ```
 
@@ -371,7 +405,7 @@ dockercoins-84bb95c9fb-jf6qh   5/5     Terminating        0          2m12s
 dockercoins-868cc48795-pbtjz   5/5     Running            0          16s
 ```
 
-After waiting for the upgrade to be completed, the version in the terminal should go from an error to `{"version":2}`! This happened without interruption of service, the requests were routed to the new pod transparently.
+After waiting for the upgrade to be completed, the version in the terminal should go from an error to `{"version":3}`! This happened without interruption of service, the requests were routed to the new pod transparently.
 
 Looking at the Helm history for this release, we should see 2 revisions:
 
@@ -401,7 +435,7 @@ helm rollback $env:RELEASE_NAME 1
 helm rollback $RELEASE_NAME 1
 ```
 
-You should see output similar to: `Rollback was a success.`
+You should see output similar to: `Rollback was a success! Happy Helming!`
 
 A process similar to the upgrade happened during the rollback. The history has also now a third revision:
 

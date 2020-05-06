@@ -26,7 +26,7 @@ Depending on where the Kubernetes, follow the following instructions to get acce
     gcloud auth login
     gcloud auth application-default login
 
-    gcloud container clusters get-credentials k8s-cluster --region australia-southeast1 --project rotc-22-04
+    gcloud container clusters get-credentials k8s-cluster --region australia-southeast1-a --project rotcaus
     ```
 
 ### Azure
