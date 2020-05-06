@@ -16,3 +16,8 @@ resource "google_storage_bucket_iam_binding" "helm_repo_bucket_role_binding" {
     null_resource.docker-registry
   ]
 }
+
+data "helm_repository" "stable" {
+  name = "stable"
+  url  = "https://kubernetes-charts.storage.googleapis.com"
+}
