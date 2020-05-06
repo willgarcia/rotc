@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dockercoins
+spec:
+  selector:
+    matchLabels:
+      app: dockercoins
+  template:
+    metadata:
+      labels:
+        app: dockercoins
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: 'swagger-stats/metrics'
+    spec:
+      containers:
+      - name: rng
+        image: k8straining/dockercoins_rng:v1
+      - name: hasher
+        image: k8straining/dockercoins_hasher:v1
+        imagePullPolicy: Always
+      - name: webui
+        image: k8straining/dockercoins_webui:v3
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+      - name: worker
+        image: k8straining/dockercoins_worker:v1
+        imagePullPolicy: Always
+      - name: redis
+        image: redis
