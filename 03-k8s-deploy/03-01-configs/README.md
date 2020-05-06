@@ -13,7 +13,7 @@ With Config Maps, we will see how to create configurations that can be shared to
 
 No code provided. You will create Kubernetes YAML definitions for pods that read configurations.
 
-Run `cd exerc/` and follow the instructions below to get started!
+Run `cd exercise/` and follow the instructions below to get started!
 
 ### ConfigMaps
 
