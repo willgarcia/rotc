@@ -19,6 +19,7 @@ Sample app from Jérôme Petazzoni - code under [Apache License 2.0](https://git
 
 ## Table of contents
 
+
    * [01-01 Docker](./01-docker/01-docker/EXERCISE-01.md#01-01-docker)
       * [Start](./01-docker/01-docker/EXERCISE-01.md#start)
       * [Building Docker Images](./01-docker/01-docker/EXERCISE-01.md#building-docker-images)
@@ -97,6 +98,9 @@ Sample app from Jérôme Petazzoni - code under [Apache License 2.0](https://git
    * [03-03 Helm charts](./03-k8s-deploy/03-03-helm/README.md#03-03-helm-charts)
       * [Start](./03-k8s-deploy/03-03-helm/README.md#start)
       * [Helm charts](./03-k8s-deploy/03-03-helm/README.md#helm-charts)
+      * [Install the Helm CLI](./03-k8s-deploy/03-03-helm/README.md#install-the-helm-cli)
+         * [Windows](./03-k8s-deploy/03-03-helm/README.md#windows)
+         * [MacOS](./03-k8s-deploy/03-03-helm/README.md#macos)
       * [Installing a Helm chart from a public repository](./03-k8s-deploy/03-03-helm/README.md#installing-a-helm-chart-from-a-public-repository)
       * [Why use Helm charts?](./03-k8s-deploy/03-03-helm/README.md#why-use-helm-charts)
       * [What is in a Helm chart?](./03-k8s-deploy/03-03-helm/README.md#what-is-in-a-helm-chart)
@@ -116,13 +120,25 @@ Sample app from Jérôme Petazzoni - code under [Apache License 2.0](https://git
       * [Uninstalling the Chart](./03-k8s-deploy/03-03-helm/solution/metabase/README.md#uninstalling-the-chart)
       * [Configuration](./03-k8s-deploy/03-03-helm/solution/metabase/README.md#configuration)
 
-   * [04-01 Azure Kubernetes Service (AKS) cluster](./04-k8s-azure/04-01-azure-aks/README.md#04-01-azure-kubernetes-service-aks-cluster)
-      * [Start](./04-k8s-azure/04-01-azure-aks/README.md#start)
-      * [Kubernetes context and kubeconfig file](./04-k8s-azure/04-01-azure-aks/README.md#kubernetes-context-and-kubeconfig-file)
+   * [04-01 Observability](./04-observability/04-01-prometheus/README.md#04-01-observability)
+      * [Start](./04-observability/04-01-prometheus/README.md#start)
+      * [Application instrumentation with Prometheus](./04-observability/04-01-prometheus/README.md#application-instrumentation-with-prometheus)
+         * [Adding metrics to a NodeJS application](./04-observability/04-01-prometheus/README.md#adding-metrics-to-a-nodejs-application)
+         * [Collecting application metrics with Prometheus in Kubernetes](./04-observability/04-01-prometheus/README.md#collecting-application-metrics-with-prometheus-in-kubernetes)
+         * [Visualise metrics in the Prometheus expression browser](./04-observability/04-01-prometheus/README.md#visualise-metrics-in-the-prometheus-expression-browser)
+         * [Grafana application dashboard](./04-observability/04-01-prometheus/README.md#grafana-application-dashboard)
+      * [Cluster wide monitoring](./04-observability/04-01-prometheus/README.md#cluster-wide-monitoring)
+         * [Grafana cluster dashboard](./04-observability/04-01-prometheus/README.md#grafana-cluster-dashboard)
+         * [Azure Monitor](./04-observability/04-01-prometheus/README.md#azure-monitor)
+      * [Cleanup](./04-observability/04-01-prometheus/README.md#cleanup)
 
-   * [04-02 Azure Function Core Tools](./04-k8s-azure/04-02-azure-func/README.md#04-02-azure-function-core-tools)
-      * [Start](./04-k8s-azure/04-02-azure-func/README.md#start)
-      * [Cross platform development with func](./04-k8s-azure/04-02-azure-func/README.md#cross-platform-development-with-func)
-      * [Cleanup](./04-k8s-azure/04-02-azure-func/README.md#cleanup)
+   * [05-01 Azure Kubernetes Service (AKS) cluster](./05-k8s-azure/05-01-azure-aks/README.md#05-01-azure-kubernetes-service-aks-cluster)
+      * [Start](./05-k8s-azure/05-01-azure-aks/README.md#start)
+      * [Kubernetes context and kubeconfig file](./05-k8s-azure/05-01-azure-aks/README.md#kubernetes-context-and-kubeconfig-file)
+
+   * [05-02 Azure Function Core Tools](./05-k8s-azure/05-02-azure-func/README.md#05-02-azure-function-core-tools)
+      * [Start](./05-k8s-azure/05-02-azure-func/README.md#start)
+      * [Cross platform development with func](./05-k8s-azure/05-02-azure-func/README.md#cross-platform-development-with-func)
+      * [Cleanup](./05-k8s-azure/05-02-azure-func/README.md#cleanup)
 
 Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
