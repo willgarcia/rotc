@@ -43,6 +43,12 @@ tasks:
       container: terraform
       command: terraform destroy -input=false -auto-approve cluster
 
+  cluster-auth:
+    description: Get credential to access the newly created Kubernetes cluster
+    run:
+      container: terraform
+      command: sh -c "gcloud container clusters get-credentials "${CLUSTER_NAME}" --region "${CLUSTER_LOCATION}" --project ${CLOUDSDK_CORE_PROJECT}"
+
   shell:
     description: Run a shell in the Terraform environment.
     run:
