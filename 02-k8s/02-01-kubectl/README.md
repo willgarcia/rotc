@@ -1,4 +1,4 @@
-# Kubectl
+# 02-01 Kubectl
 
 In this module, we introduce `kubectl` to access a remote Kubernetes cluster.
 

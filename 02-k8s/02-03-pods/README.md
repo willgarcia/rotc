@@ -1,4 +1,4 @@
-# Pods
+# 02-03 Kubernetes pods
 
 In this module, we will run our application in a Kubernetes cluster.
 

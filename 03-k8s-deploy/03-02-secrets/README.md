@@ -1,4 +1,4 @@
-# Secrets
+# 03-02 Kubernetes Secrets
 
 You will learn about:
 
