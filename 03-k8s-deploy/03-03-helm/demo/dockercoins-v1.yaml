@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dockercoins
+  labels:
+    app: dockercoins
+    service: dockercoins
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    name: http
+  selector:
+    app: dockercoins
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dockercoins
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dockercoins
+  labels:
+    app: dockercoins
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dockercoins
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: dockercoins
+        version: v1
+    spec:
+      containers:
+      - name: dockercoins
+        image: k8straining/dockercoins_webui:v1
+        ports:
+        - containerPort: 80
+      - name: rng
+        image: k8straining/dockercoins_rng:v1
+        ports:
+        - containerPort: 3001
+      - name: hasher
+        image: k8straining/dockercoins_hasher:v1
+        ports:
+        - containerPort: 3000
+      - name: worker
+        image: k8straining/dockercoins_worker:v1
+      - name: redis
+        image: redis
+        ports:
+          - containerPort: 6379
+---
