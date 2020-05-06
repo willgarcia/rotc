@@ -19,7 +19,7 @@ When creating and accessing multiple clusters, the kube config file stores and m
 Get the access credentials to the AKS cluster with the following command:
 
 ```console
-az aks get-credentials --name k8straining-aks --resource-group k8straining
+az aks get-credentials --name rotcaus-aks --resource-group rotcaus
 ```
 
 Verify if kubectl is pointing at the cluster with:
@@ -33,13 +33,12 @@ The output should be similar to this:
 ```output
 CURRENT   NAME             CLUSTER          AUTHINFO                                NAMESPACE
           k8scluster        k8scluster        k8scluster
-*         k8straining-aks   k8straining-aks   clusterUser_k8straining_k8straining-aks   team-trainers
+*         rotcaus-aks   rotcaus-aks   clusterUser_k8straining_k8straining-aks   team-trainers
 ```
 
-If the current context is not `k8straining-aks`, change it with `kubectl config use-context k8straining-aks`
+If the current context is not `rotcaus-aks`, change it with `kubectl config use-context rotcaus-aks`
 
-So far with minikube, we have only been working with a cluster running on 1 worker node.
-Looking now at the AKS nodes, you will see that this cluster is configured to run with 2 worker nodes:
+Looking at the AKS nodes, you will see that this cluster is configured to run with 2 worker nodes:
 
 ```output
 kubectl get nodes
@@ -51,7 +50,7 @@ aks-default-13721089-vmss000001   Ready    agent   7h9m   v1.12.8
 If you are curious about what is deployed in the AKS cluster, look at the Kubernetes Dashboard with
 
 ```console
-az aks browse --resource-group k8straining --name k8straining-aks
+az aks browse --resource-group rotcaus --name rotcaus-aks
 ```
 
 This will open a WebUI accessible from a browser on `http://127.0.0.1:8001/`.
@@ -102,7 +101,7 @@ The output should be similar to this:
 ```output
 CURRENT   NAME             CLUSTER          AUTHINFO                                NAMESPACE
           k8scluster        k8scluster        k8scluster
-*         k8straining-aks   k8straining-aks   clusterUser_k8straining_k8straining-aks   my-namespace
+*         rotcaus-aks   rotcaus-aks   clusterUser_k8straining_k8straining-aks   my-namespace
 ```
 
 NOTE: Controlling the access to a cluster is not covered here. If you are interested in knowning more about the authentication mechanisms, please read:

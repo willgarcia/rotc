@@ -1,48 +1,44 @@
-# HELM Charts
+# Helm Charts
 
 You will learn about:
 
-* installing existing HELM charts
-* building and installing an HELM chart for the `DockerCoins` application
-* publish the `DockerCoins` HELM chart to a private Docker registry (Azure Container Registry)
-* updating and rollbacking the `DockerCoins` app in Kubernetes with HELM releases
+* installing existing Helm charts
+* building and installing a Helm chart for the `DockerCoins` application
+* publishing the `DockerCoins` Helm chart to a private Helm chart repository
+* updating and rolling back the `DockerCoins` app in Kubernetes with Helm releases
 
 ## Start
 
 You are provided with:
 
 * Kubernetes YAML definitions for the `DockerCoins` application
-* a HELM chart  for the `DockerCoins` application
+* a Helm chart for the `DockerCoins` application
 
-## HELM charts
+## Helm charts
 
-HELM is an application package manager for Kubernetes.
+Helm is an application package manager for Kubernetes.
 
 In principle, it provides similar features to other existing package managers:
 
-* installation from local / remote repository**
-* local caching of repositories source lists
+* installation from local and remote repositories
+* local caching of the packages available in a repository
 * dependency management
-* install, upgrade, delete of packages known as charts
+* install, upgrade and deletion of packages (known as 'charts' in Helm parlance)
 
 You may be already using a package manager for:
 
-* Development: `NPM`, `Yarn`, `Nuget`
-* OS distributions: `chocolatey` on Windows, `YUM` on CentOS, `APT` for Ubuntu/Debian, `brew` for MacOS.
+* development - for example NPM, RubyGems or NuGet
+* OS distributions - Chocolatey on Windows, Yum on CentOS, Apt for Ubuntu and Debian or Homebrew for MacOS.
 
-** HELM charts can be installed from and stored in repositories. Azure Container Registry supports the storage of [private HELM charts](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-helm-repos) in addition to private Docker images.
+Helm charts can be installed from and stored in repositories. Tools like Artifactory support the storage of private Helm charts in addition to private Docker images.
 
-HELM charts also provide ways to configure the applications with defaults values or overrides making them re-usable:
+Helm charts also provide ways to configure the applications with default values or overrides making them customisable.
 
-Links:
+## Installing a Helm chart from a public repository
 
-* [Manage helm charts for Azure Container Registries](https://docs.microsoft.com/en-us/cli/azure/acr/helm?view=azure-cli-latest)
+To get familiar with the Helm CLI, we are going to install the `metabase` application in our cluster.
 
-## Installing a HELM chart from a public repository
-
-For us to get familiar with the HELM CLI, we are going to install the `metabase` application in our cluster.
-
-Let's search for it in the public stable chart repo with:
+Let's search for it in the public stable chart repository with:
 
 ```console
 helm search metabase
@@ -62,20 +58,36 @@ The structure of the chart is as following:
 * `values.yaml`: default configuration values of the chart
 * `templates`: Kubernetes YAML definitions, generalised as manifests that can be configured through the chart `values.yaml` file
 
-Metabase as no dependencies but for Charts containing a `requirements.yaml`, it is possible to list and update dependencies with:
+Metabase has no dependencies. For Charts containing a `requirements.yaml`, it is possible to list and update dependencies with:
 
 ```console
 helm dep list
 helm dep update
 ```
 
+Let's install the metabase chart. Each unique installation of a Helm chart is identified by a name. We can let Helm autogenerate one for us, but it'll be easier if we set our own name:
+
+```console
+# Windows only
+$env:NAMESPACE="[username-placeholder]" # should be the same as what you used in exercise 03-01
+$env:RELEASE_NAME=$env:NAMESPACE + "-metabase"
+
+# MacOS only
+export NAMESPACE=[username-placeholder] # should be the same as what you used in exercise 03-01
+export RELEASE_NAME="$NAMESPACE-metabase"
+```
+
 Install `stable/metabase` in the cluster with:
 
 ```console
-helm install stable/metabase
+# Windows only
+helm install stable/metabase --name $env:RELEASE_NAME
+
+# MacOS only
+helm install stable/metabase --name $RELEASE_NAME
 ```
 
-HELM keeps track of the version installed by creating releases:
+Helm keeps track of the version installed by creating releases, which we can see by running:
 
 ```console
 helm ls
@@ -85,28 +97,39 @@ The output should be similar to this:
 
 ```output
 NAME        REVISION    UPDATED                     STATUS      CHART           APP VERSION NAMESPACE
-my-release  1           Sat Jul 27 00:08:58 2019    DEPLOYED    metabase-0.5.0  v0.31.2     team-trainers```
+my-release  1           Sat Jul 27 00:08:58 2019    DEPLOYED    metabase-0.5.0  v0.31.2     team-trainers
 ```
 
-Wait for the HELM to be installed and follow the instructions on the NOTES:
+Wait for the chart to be installed and follow the instructions in the NOTES:
 
 ```console
 # Windows only
-$env:TEAM_NAME=[team-name-placeholder]
-export POD_NAME=$(kubectl get pods --namespace $env:TEAM_NAME -l "app=metabase,release=my-release" -o jsonpath="{.items[0].metadata.name}")
-kubectl port-forward --namespace $env:TEAM_NAME $POD_NAME 8080:3000
+$env:POD_NAME=$(kubectl get pods --namespace $env:NAMESPACE -l "app=metabase,release=$env:RELEASE_NAME" -o jsonpath="{.items[0].metadata.name}")
+kubectl port-forward --namespace $env:NAMESPACE $POD_NAME 8080:3000
 
 # MacOS only
-export TEAM_NAME=[team-name-placeholder]
-export POD_NAME=$(kubectl get pods --namespace ${TEAM_NAME} -l "app=metabase,release=my-release" -o jsonpath="{.items[0].metadata.name}")
-kubectl port-forward --namespace ${TEAM_NAME} $POD_NAME 8080:3000
+export POD_NAME=$(kubectl get pods --namespace ${NAMESPACE} -l "app=metabase,release=$RELEASE_NAME" -o jsonpath="{.items[0].metadata.name}")
+kubectl port-forward --namespace ${NAMESPACE} $POD_NAME 8080:3000
 ```
 
 Access metabase on `http://127.0.0.1:8080`!
 
-## Why HELM charts
+We're using `kubectl port-forward` here to proxy traffic from port 8080 on our local machine to port 3000 on the metabase container. This is
+another useful debugging tool and is not limited to pods created with Helm. 
 
-The following YAML definitions provide everything we need to create the `DockerCoins` application **without** HELM:
+Let's delete our release before deploying another application:
+
+```console
+# Windows only
+helm delete --purge $env:RELEASE_NAME
+
+# MacOS only
+helm delete --purge $RELEASE_NAME
+```
+
+## Why use Helm charts?
+
+The following YAML definitions provide everything we need to create the `DockerCoins` application **without** Helm:
 
 ```yaml
 apiVersion: v1
@@ -150,7 +173,7 @@ spec:
     spec:
       containers:
       - name: dockercoins
-        image: k8straining/dockercoins_webui:v1
+        image: rotcaus/dockercoins_webui:v1
         ports:
         - containerPort: 80
         livenessProbe:
@@ -162,15 +185,15 @@ spec:
             path: /
             port: http
       - name: rng
-        image: k8straining/dockercoins_rng:v1
+        image: rotcaus/dockercoins_rng:v1
         ports:
         - containerPort: 3001
       - name: hasher
-        image: k8straining/dockercoins_hasher:v1
+        image: rotcaus/dockercoins_hasher:v1
         ports:
         - containerPort: 3000
       - name: worker
-        image: k8straining/dockercoins_worker:v1
+        image: rotcaus/dockercoins_worker:v1
       - name: redis
         image: redis
         ports:
@@ -178,45 +201,29 @@ spec:
 ---
 ```
 
-If we were to install or update its Kubernetes resources, we could just run (don't run it):
+If we were to install or update its Kubernetes resources, we could just run the following (don't run it):
 
 ```console
 kubectl apply -f dockercoins-v1.yaml
 ```
 
-When working with multiple applications, maintaining YAML templates:
-
-* for each resource (Service, Deployment, ServiceAccount, Volumes, ConfigMaps, etc)
-* and for each custom configuration (secrets, environment variables, health checks, images' versions, etc)
-
+When working with multiple applications, maintaining these YAML templates for each resource (Service, Deployment, ServiceAccount, Volumes, ConfigMaps etc.)
 tends to become a tedious task :(
 
-What are some of the common needs around configuration?
+The approach of forking/versioning templates per context/per environment is an option but generally leads to an explosion of the number of templates which does not scale well and quickly becomes difficult to manage.
 
-A different configuration:
-
-* per environment: dev, staging, prod.
-  * Example with the Deployment resource type: *Dev environment might used a different Docker registry than the Prod environment, so the image names will be different.*
-* per user context: locally or in the Cloud.
-  * Example with the Service resource type: *a Cloud load balancer will not be used locally to run pods and services*
-* ad-hoc configuration:
-  * *test the application with new environment variables*
-  * *update the application health checks*
-  * *test the addition of persistent volumes*
-
-The approach of forking/versioning templates per context of use/per environment is an option but generally leads to an explosion of the number of templates which does not scale well in the context of automated builds / installations integrated into a CI system.
-
-HELM charts solve some of these challenges by providing an abstraction layer on top of Kubernetes YAML definitions. Kubernetes YAML definitions can be templatised and assimilated to configurable manifests that can be bundled as a package.
+Helm charts solve some of these challenges by providing an abstraction layer on top of Kubernetes YAML definitions. Kubernetes YAML definitions can be templatised and then bundled up as a package.
 
 So, what are the benefits of using a package manager?
 
+* templates can be built, shared and re-used to simplify getting up and running with Kubernetes and manage configuration across different environments
 * in an enterprise context, packages can be published or come from trusted public or private repositories
 * packages can be upgraded or downgraded from one version to another
 * packages can have dependencies on other packages. After dependency resolution, all the dependent packages can be installed automatically.
 
-## What is in a HELM chart
+## What is in a Helm chart?
 
-We are not going to create the `DockerCoins` chart from scratch but for learning purposes, create a new chart to see what the default skeleton of a chart looks like:
+We are not going to create the `DockerCoins` chart from scratch. However, for learning purposes, create a new chart to see what the default skeleton of a chart looks like:
 
 ```console
 helm create dockercoins
@@ -229,24 +236,24 @@ The structure of the chart is as following:
 * `values.yaml`: default configuration values of the chart
 * `templates`: Kubernetes YAML definitions, generalised as manifests that can be configured through the chart `values.yaml` file
 
-To transform our Kubernetes YAML definitions present in `dockercoins-v1.yaml` into a HELM chart, we would have to:
+To transform our Kubernetes YAML definitions present in `dockercoins-v1.yaml` into a Helm chart, we would have to:
 
-* move the `dockercoins-v1.yaml` into the templates folder
-* templatise any attribute in the YAML that we want make dynamic. For example, if we want to make the redis image name and version dynamic, so that we can upgrade redis in the future, we would change this static definition from :
-
-```console
-      - name: redis
-        image: redis
-```
-
-to this dynamic HELM templatised version of it:
+* move the `demo/dockercoins-v1.yaml` into the templates folder
+* templatise any attribute in the YAML that we want make dynamic. For example, if we want to make the Redis image name and version dynamic, so that we can upgrade Redis in the future, we would change this static definition from:
 
 ```console
   - name: redis
-        image: "{{ .Values.image.redis.repository }}:{{ .Values.image.redis.tag }}"
+    image: redis
 ```
 
-The next steps would be declare a default value for the redis image and version, using the same path we've used in the template. `values.yaml` would look like:
+to this dynamic Helm templatised version of it:
+
+```console
+  - name: redis
+    image: "{{ .Values.image.redis.repository }}:{{ .Values.image.redis.tag }}"
+```
+
+The next steps would be to declare a default value for the Redis image and version, using the same path we've used in the template. `values.yaml` would look like:
 
 ```console
 image:
@@ -255,101 +262,93 @@ image:
     tag: latest
 ```
 
-When executing the HELM chart in the next steps, you will realise that the redis image and its version become elements that can be changed dynamically when installing the chart.
+When executing the Helm chart in the next steps, you will see how the Redis image can be changed dynamically when installing the chart.
 
-## Search for a HELM chart in an Azure Container Registry
+## Search for a Helm chart in a private repository
 
-We will use our existing ACR Docker registry `k8straining` to host our `DockerCoins` chart.
+In addition to using the public Helm chart repository, we can also use private repositories.
 
-First, to avoid specifying the ACR registry name in the next commands, configure your default ACR registry with:
+We've set up one for you using Google Cloud Storage (similar to AWS S3), but tools like Artifactory can also be used to host private repositories.  
 
-```console
-az configure --defaults acr=k8straining
-```
-
-Add the `k8straining` repository to HELM repositories index that is cached in your machine:
+Add the `rotcaus` repository to the list of Helm repositories on your machine:
 
 ```console
-az acr helm repo add
+helm repo add rotcaus https://riseofthecontainerssydney-helm.storage.googleapis.com
 ```
 
-Update the local repository index and list all the charts available in the repository index:
+Update the local repository index and list all the charts available in the newly added repository:
 
 ```console
 helm repo update
-az acr helm list -o table
+helm search rotcaus/
 ```
 
 The output should be similar to this:
 
 ```console
-NAME      CHART VERSION    APP VERSION    DESCRIPTION
---------  ---------------  -------------  ---------------------------
-dockercoins  0.1.0            1.0            A Helm chart for Kubernetes
+NAME                   	CHART VERSION	APP VERSION	DESCRIPTION
+rotcaus/dockercoins	0.1.0        	1.0        	A Helm chart for Kubernetes
 ```
 
 Inspect the chart to show its metadata and the possible values that can be configured on it:
 
 ```console
-helm inspect k8straining/dockercoins
+helm inspect rotcaus/dockercoins
 ```
 
-In this previous command `k8straining` is the name of the HELM repository (ACR Registry) and `dockercoins` the name of the chart (listed previously with `az acr helm list`).  
+In this previous command `rotcaus` is the name of the Helm repository we added earlier and `dockercoins` the name of the chart.
 
-Cool, our chart is there and we can change a few configurations on it such as the version of the Docker images to run and the type of node (`LoadBalancer` being the default for a Cloud Load balancer such as the one we use in AKS)
+Cool, our chart is there and we can change a few options on it such as the version of the Docker images to run and the type of service to use (`LoadBalancer` being the default for a cloud load balancer).
 
-## Run a HELM chart
+## Run a Helm chart
 
-Install the chart in AKS by running:
+Install the chart in Kubernetes by running:
 
 ```console
 # Windows only
-helm install k8straining/dockercoins --version 0.1.0 --name $env:TEAM_NAME
+$env:RELEASE_NAME=$env:NAMESPACE + "-coins"
+helm install --wait rotcaus/dockercoins --version 0.1.0 --name $env:RELEASE_NAME
 
 # MacOS only
-helm install k8straining/dockercoins --version 0.1.0 --name $TEAM_NAME
+export RELEASE_NAME="NAMESPACE-coins"
+helm install --wait rotcaus/dockercoins --version 0.1.0 --name $RELEASE_NAME
 ```
 
-The --name option used here does not represent a Kubernetes namespace but the name of the HELM release. We use the team name here to avoid conflicts between teams' release names.
+This may take a few moments.
 
 Once the chart is installed, you should be able to access it by its public IP. Allow some time for the service to be allocated a public IP, use the watch mode `-w` to following the change from "no IP" to "a public IP is assigned to the Kubernetes service":
 
 ```console
 # Windows only
-kubectl get svc --namespace $env:TEAM_NAME -w
+kubectl get svc --namespace $env:NAMESPACE -w
 
 # MacOS only
-kubectl get svc --namespace $TEAM_NAME -w
+kubectl get svc --namespace $NAMESPACE -w
 ```
 
 Once the column IP goes from pending to an available IP, do `Ctrl+C` and access the app with:
 
 ```console
-NOTES:
-1. Get the application URL by running these commands:
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace team-trainers svc -w dockercoins'
+# Windows only
+$env:SERVICE_IP=$(kubectl get svc --namespace $env:NAMESPACE ${env:RELEASE_NAME}-dockercoins -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+echo http://$env:SERVICE_IP:80
 
-  # Windows only
-  $env:SERVICE_IP=$(kubectl get svc --namespace $env:TEAM_NAME dockercoins -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-  echo http://$env:SERVICE_IP:80
-
-  # MacOS only
-  export SERVICE_IP=$(kubectl get svc --namespace $TEAM_NAME dockercoins -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-  echo http://$SERVICE_IP:80
+# MacOS only
+export SERVICE_IP=$(kubectl get svc --namespace $NAMESPACE $RELEASE_NAME-dockercoins -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+echo http://$SERVICE_IP:80
 ```
 
-## Upgrade and rollback a HELM chart
+## Upgrade and rollback a Helm chart
 
 Run the following command and keep it open in a separate terminal. This will give us the current version of the webui (version 1):
 
 ```console
 # Windows only
-$env:SERVICE_IP=$(kubectl get svc --namespace $env:TEAM_NAME dockercoins -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+$env:SERVICE_IP=$(kubectl get svc --namespace $env:NAMESPACE ${env:RELEASE_NAME}-dockercoins -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 while ($true) {start-sleep 1;(iwr http://$env:SERVICE_IP/info).content;}
 
 # MacOS only
-export SERVICE_IP=$(kubectl get svc --namespace $TEAM_NAME dockercoins -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+export SERVICE_IP=$(kubectl get svc --namespace $NAMESPACE $RELEASE_NAME-dockercoins -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 while sleep 1; do echo -e && curl http://$SERVICE_IP/info; done
 ```
 
@@ -357,15 +356,15 @@ Upgrade the chart with:
 
 ```console
 # Windows only
-helm upgrade --set image.webui.tag=v2 $env:TEAM_NAME k8straining/dockercoins
+helm upgrade --wait --set image.webui.tag=v2 $env:RELEASE_NAME rotcaus/dockercoins
 
 # MacOS only
-helm upgrade --set image.webui.tag=v2 $TEAM_NAME k8straining/dockercoins
+helm upgrade --wait --set image.webui.tag=v2 $RELEASE_NAME rotcaus/dockercoins
 ```
 
-The version 2 of the Web UI image will add a new HTTP endpoint `/info` to the API.
+Version 2 of the web UI image adds a new HTTP endpoint, `/info`, to the API.
 
-When running `kubectl get pods -w` during the upgrade process, you should see that a new `DockerCoins` pod is created and once created, the old one gets terminated:
+If you run `kubectl get pods -w` during the upgrade process, you should see that a new `dockercoins` pod is created. Once the new pod is created, the old one gets terminated:
 
 ```console
 dockercoins-84bb95c9fb-jf6qh   5/5     Terminating        0          2m12s
@@ -374,14 +373,14 @@ dockercoins-868cc48795-pbtjz   5/5     Running            0          16s
 
 After waiting for the upgrade to be completed, the version in the terminal should go from an error to `{"version":2}`! This happened without interruption of service, the requests were routed to the new pod transparently.
 
-Looking at the HELM history for this release, we should see 2 revisions:
+Looking at the Helm history for this release, we should see 2 revisions:
 
 ```console
 # Windows only
-helm history $env:TEAM_NAME
+helm history $env:RELEASE_NAME
 
 # MacOS only
-helm history $TEAM_NAME
+helm history $RELEASE_NAME
 ```
 
 Expected output:
@@ -392,26 +391,26 @@ REVISION	UPDATED                 	STATUS    	CHART         	DESCRIPTION
 2       	Sun Jul 28 11:14:13 2019	DEPLOYED  	dockercoins-0.1.0	Upgrade complete
 ```
 
-If version 2 does not operate as expected, you can always rollback it to the revision 1:
+If version 2 does not operate as expected, you can always rollback to the first version:
 
 ```console
 # Windows only
-helm rollback $env:TEAM_NAME 1
+helm rollback $env:RELEASE_NAME 1
 
 # MacOS only
-helm rollback $TEAM_NAME 1
+helm rollback $RELEASE_NAME 1
 ```
 
-Expected output: `Rollback was a success.`
+You should see output similar to: `Rollback was a success.`
 
 A process similar to the upgrade happened during the rollback. The history has also now a third revision:
 
 ```console
 # Windows only
-helm history $env:TEAM_NAME
+helm history $env:RELEASE_NAME
 
 # MacOS only
-helm history $TEAM_NAME
+helm history $RELEASE_NAME
 ```
 
 Expected output:
@@ -423,20 +422,16 @@ REVISION	UPDATED                 	STATUS    	CHART         	DESCRIPTION
 3       	Sun Jul 28 11:18:24 2019	DEPLOYED  	dockercoins-0.1.0	Rollback to 1
 ```
 
-After deployment completion, the version from the API should go from version 2 to the initial error (no /info endpoint).
+After the deployment has completed, the version from the API should go from version 2 to the error we were seeing with the original image version (no /info endpoint).
 
 ## Cleanup
 
 ```console
 # Windows only
-kubectl delete all --all -n "$env:TEAM_NAME"
-helm delete $(helm ls --namespace $env:TEAM_NAME --short)
+helm delete --purge $env:RELEASE_NAME
+kubectl delete all --all -n "$env:NAMESPACE"
 
 # MacOS only
-kubectl delete all --all -n "${TEAM_NAME}"
-helm delete $(helm ls --namespace $TEAM_NAME --short)
+helm delete --purge $RELEASE_NAME
+kubectl delete all --all -n "${NAMESPACE}"
 ```
-
-Links:
-
-* [Find HELM charts](https://docs.microsoft.com/en-us/azure/aks/kubernetes-helm)

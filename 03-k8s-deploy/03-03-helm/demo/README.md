@@ -1,11 +1,11 @@
-# Demo - HELM chart releases in Kubernetes
+# Demo - Helm chart releases in Kubernetes
 
-## Package and publish a HELM chart
+## Package and publish a Helm chart
 
 Download the `DockerCoins` chart:
 
 ```console
-helm fetch k8straining/dockercoins
+helm fetch rotcaus/dockercoins
 cd dockercoins
 ```
 

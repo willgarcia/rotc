@@ -6,16 +6,16 @@ replicaCount: 1
 
 image:
   webui:
-    repository: k8straining/dockercoins_webui
+    repository: rotcaus/dockercoins_webui
     tag: v1
   rng:
-    repository: k8straining/dockercoins_rng
+    repository: rotcaus/dockercoins_rng
     tag: v1
   hasher:
-    repository: k8straining/dockercoins_hasher
+    repository: rotcaus/dockercoins_hasher
     tag: v1
   worker:
-    repository: k8straining/dockercoins_worker
+    repository: rotcaus/dockercoins_worker
     tag: v1
   redis:
     repository: redis

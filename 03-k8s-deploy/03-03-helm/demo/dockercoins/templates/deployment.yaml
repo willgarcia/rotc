@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dockercoins
+  name: {{ .Release.Name }}-dockercoins
   labels:
-    app: dockercoins
+    app: {{ .Release.Name }}-dockercoins
     version: v1
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: dockercoins
+      app: {{ .Release.Name }}-dockercoins
       version: v1
   template:
     metadata:
       labels:
-        app: dockercoins
+        app: {{ .Release.Name }}-dockercoins
         version: v1
     spec:
       containers:

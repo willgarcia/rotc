@@ -9,7 +9,7 @@ Publishing is done via the `docker push` command. However, if you were to use th
 ### Tag the Docker images
 
 To let Docker know you want to publish to our own registry, you need to _tag_ the image with the registry server location (_address:port_).
-The GCP registry created for this workshop is `rotcaus/dockerfundamentals`.
+The Docker registry used for this workshop is `rotcaus/dockerfundamentals` (Docker Hub).
 
 When tagging an image, a recommended practice is to add a version to the tag name.
 From now on, we will use the **team name** as the version to tag all our Docker images.
@@ -62,10 +62,6 @@ Docker HUB
   # Ask for the password
   echo "[account-password]" | docker login --username rotcaus --password-stdin
   ```
-
-GCP
-
-If your push is denied, make sure you're logged in to GCP - run `gcloud auth login` and try again.
 
 ### Publish the Docker image
 

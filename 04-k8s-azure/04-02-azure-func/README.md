@@ -73,14 +73,14 @@ Finally deploy the function to AKS:
 ```console
 # Windows only
 $env:TEAM_NAME="[team-name-placeholder]"
-func kubernetes deploy --name http-trigger --namespace $env:TEAM_NAME --registry k8straining.azurecr.io
+func kubernetes deploy --name http-trigger --namespace $env:TEAM_NAME --registry rotcaus.azurecr.io
 
 # MacOS only
 export TEAM_NAME=[team-name-placeholder]
 func kubernetes deploy \
     --name http-trigger \
     --namespace ${TEAM_NAME} \
-    --registry k8straining.azurecr.io
+    --registry rotcaus.azurecr.io
 ```
 
 This will:
@@ -93,8 +93,8 @@ This will:
 The output should be similar to this:
 
 ```output
-Running 'docker build -t k8straining.azurecr.io/http-trigger /Users/wgarcia/Workspace/gitlab.com/rise-of-containers/03-02-aks-func-helm/solution'..done
-Running 'docker push k8straining.azurecr.io/http-trigger'..........................done
+Running 'docker build -t rotcaus.azurecr.io/http-trigger /Users/wgarcia/Workspace/gitlab.com/rise-of-containers/03-02-aks-func-helm/solution'..done
+Running 'docker push rotcaus.azurecr.io/http-trigger'..........................done
 secret/http-trigger created
 service/http-trigger-http created
 deployment.apps/http-trigger-http created
