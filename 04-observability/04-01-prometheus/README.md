@@ -25,7 +25,6 @@ We will use the `DockerCoins` webui application for this part. This version 3 of
 Run the webui locally with the following commands:
 
 ```console
-cd webui/
 npm install
 npm run start
 ```
@@ -111,7 +110,6 @@ The per-pod Prometheus annotations available are:
 Start the deployment with:
 
 ```console
-cd exercise/
 kubectl apply -f prometheus-app.yaml
 ```
 
@@ -146,7 +144,7 @@ The Prometheus expression browser is a web ui provided by Prometheus itself show
 Start it by forwarding the local port `9090` on your client machine to port `9090` on the pod that is running Prometheus in your Kubernetes cluster:
 
 ```console
-kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090
+kubectl -n prometheus port-forward $(kubectl -n prometheus get pods -o jsonpath='{.items[0].metadata.name}') 9090:9090
 ```
 
 Go to <http://localhost:9090>.
@@ -175,26 +173,14 @@ From here, select the dashboard called "swagger-stats dashboard release".
 
 You should now see live metrics coming from Prometheus!
 
-## Cluster wide monitoring
+In this section, we've send metrics from our application to Prometheus and graph them in Grafana.
 
-In the previous section, we've send metrics from our application to Prometheus and restituted it in Grafana.
-
-### Grafana cluster dashboard
-
-Looking at the Grafana, you will find additional dashboards:
-
-* Kubernetes App Metrics
-* Kubernetes cluster monitoring (via Prometheus)
-* Kubernetes Deployment metrics
-* Kubernetes Nodes - 01 (Node Exporter)
-* Kubernetes Pod Metrics
-
-Following the same principle as for our application, these dashboards provides visualisations on the state of the cluster resources, with interesting filtering capabilities on namespaces, pods, containers and more!
+Grafana also integrates with Prometheus Alertmanager. If issues arise or new users patterns are found based on metrics' thresholds,  alerts can be configured to send SMS/chat messages to all the developers in the team that are looking at support activities.
 
 ### Resources
 
-* [Istio grafana dashboards](https://istio.io/docs/tasks/observability/metrics/using-istio-dashboard/)
 * [Kubernetes grafana dashboard](https://github.com/Thakurvaibhav/k8s/tree/master/monitoring/dashboards)
+* [Istio grafana dashboards](https://istio.io/docs/tasks/observability/metrics/using-istio-dashboard/)
 
 ## Cleanup
 
@@ -205,12 +191,3 @@ kubectl delete all --all -n "$env:TEAM_NAME"
 # MacOS
 kubectl delete all --all -n "${TEAM_NAME}"
 ```
-
-
-
-
-kubectl expose deployment dockercoins --type=LoadBalancer --port 8082
-
-kubectl port-forward prometheus-deployment-66ff565bbc-4lxpj 8080:9090 -n prometheus
-
-
