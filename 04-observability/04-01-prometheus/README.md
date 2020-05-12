@@ -1,4 +1,4 @@
-# 04-01 Observability
+# 04-01 Metrics collection and visualisation
 
 You will learn about:
 

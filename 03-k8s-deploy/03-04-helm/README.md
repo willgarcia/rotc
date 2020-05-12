@@ -1,4 +1,4 @@
-# 03-03 Helm charts
+# 03-04 Helm charts
 
 You will learn about:
 
