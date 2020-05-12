@@ -25,8 +25,9 @@ We will use the `DockerCoins` webui application for this part. This version 3 of
 Run the webui locally with the following commands:
 
 ```console
-npm install express redis swagger-stats
-node webui.js
+cd webui/
+npm install
+npm run start
 ```
 
 Redis will throw errors as it is not running but the webui should be still be accessible on port `80`. Generate now traffic on the application by accessing the following HTTP endpoints:
@@ -53,9 +54,9 @@ Some of these metrics exposed by swagger stats will be useful to do monitoring v
 * `api_all_success_total` is the number of successful requests on the application
 * `api_request_duration_milliseconds_bucket` represents the duration of each request
 
-If you want a visual representation of these metrics go to the swagger-stats dashboard located at <http://localhost/swagger-stats/.>
+If you want a visual representation of these metrics go to the swagger-stats dashboard located at <http://localhost/swagger-stats/ui>
 
-Ok, so at this stage we've instrumented our application. From here, Prometheus will be able to then scrape this endpoint and collect metrics from our application.
+At this stage we've instrumented our application. From here, Prometheus will be able to then scrape this endpoint and collect metrics from our application.
 
 ### Collecting application metrics with Prometheus in Kubernetes
 
@@ -82,28 +83,35 @@ spec:
     spec:
       containers:
       - name: rng
-        image: k8straining/dockercoins_rng:v1
+        image: rotcaus/dockercoins_rng:v1
         imagePullPolicy: Always
       - name: hasher
-        image: k8straining/dockercoins_hasher:v1
+        image: rotcaus/dockercoins_hasher:v1
         imagePullPolicy: Always
       - name: webui
-        image: k8straining/dockercoins_webui:v3
+        image: rotcaus/dockercoins_webui:v3
         imagePullPolicy: Always
         ports:
         - containerPort: 80
       - name: worker
-        image: k8straining/dockercoins_worker:v1
+        image: rotcaus/dockercoins_worker:v1
         imagePullPolicy: Always
       - name: redis
         image: redis
 ```
 
-Via these annotations, Prometheus leverages the Kubernetes API and uses service discovery mechanics to dynamically find pods that expose metrics.
+Prometheus leverages the Kubernetes APIs to dynamically detects pods that expose metrics based on the presence of the `prometheus.io/*` annotations.
+
+The per-pod Prometheus annotations available are:
+
+* `prometheus.io/scrape`: Enable or disable Prometheus scraping
+* `prometheus.io/path`: HTTP path of the metrics endpoints (default is `/metrics`)
+* `prometheus.io/port`: Use a scraping port different to the port declared by the pod
 
 Start the deployment with:
 
 ```console
+cd exercise/
 kubectl apply -f prometheus-app.yaml
 ```
 
@@ -113,7 +121,7 @@ Verify that `DockerCoins` webui version is up:
 kubectl get pods
 ```
 
-The output should be similar to (5 services of 5 running):
+After a few seconds/minutes, the output should be similar to (5 services of 5 running):
 
 ```output
 NAME                        READY   STATUS    RESTARTS   AGE
@@ -135,7 +143,7 @@ And visit a few endpoints:
 
 The Prometheus expression browser is a web ui provided by Prometheus itself showing all the metrics collected.
 
-Start it by forwarding the local port `9090` on your client machine to port `9090` on the pod that is running Prometheus in your AKS cluster:
+Start it by forwarding the local port `9090` on your client machine to port `9090` on the pod that is running Prometheus in your Kubernetes cluster:
 
 ```console
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090
@@ -183,18 +191,10 @@ Looking at the Grafana, you will find additional dashboards:
 
 Following the same principle as for our application, these dashboards provides visualisations on the state of the cluster resources, with interesting filtering capabilities on namespaces, pods, containers and more!
 
-### Azure Monitor
+### Resources
 
-Alternatively to Grafana+Prometheus, Azure Monitor can be used to get insights on the cluster activities.
-
-Go to Azure monitor blade of the `k8straining` AKS cluster.
-
-Go to the nodes tab, and add a filter on your team namespace.
-
-* Are all of the pods running on the same node?
-* Find a container in a pod and look at its Docker image and environment variables.
-
-The Azure Metrics are currently less complete than in Prometheus+Grafana but Microsoft has rolled out a preview integration of [Azure Monitor with Prometheus](https://azure.microsoft.com/en-au/blog/azure-monitor-for-containers-with-prometheus-now-in-preview/).
+* [Istio grafana dashboards](https://istio.io/docs/tasks/observability/metrics/using-istio-dashboard/)
+* [Kubernetes grafana dashboard](https://github.com/Thakurvaibhav/k8s/tree/master/monitoring/dashboards)
 
 ## Cleanup
 
@@ -205,3 +205,12 @@ kubectl delete all --all -n "$env:TEAM_NAME"
 # MacOS
 kubectl delete all --all -n "${TEAM_NAME}"
 ```
+
+
+
+
+kubectl expose deployment dockercoins --type=LoadBalancer --port 8082
+
+kubectl port-forward prometheus-deployment-66ff565bbc-4lxpj 8080:9090 -n prometheus
+
+
