@@ -1,15 +1,10 @@
 # Prometheus
 
-# GKE
+## GKE
 
-The scripts under `.build/prometheus/gke` are used by the batect task `` to:
-- to install prometheus
-- add a Stackdriver sidecar to prometheus, so that metrics can be viewed in the GCP console>Stackdriver
+The scripts under `.build/scripts/prometheus/gke/prometheus-stackdriver.sh` are used by the batect task `./batect setup-cluster` to:
 
-bash ./prometheus-stackdriver.sh deployment prometheus-deployment
+* to install prometheus
+* add a Stackdriver sidecar to prometheus, so that metrics can be viewed in the GCP console>Stackdriver
 
-kubectl port-forward prometheus-deployment-66ff565bbc-4lxpj 8080:9090 -n prometheus
-
-https://github.com/Stackdriver/stackdriver-prometheus-sidecar#compatibility
-
-https://console.cloud.google.com/gcr/images/stackdriver-prometheus/GLOBAL/stackdriver-prometheus-sidecar?gcrImageListsize=30&gcrImageListquery=%255B%255D
+The compatibility matrix available at <https://github.com/Stackdriver/stackdriver-prometheus-sidecar#compatibility> shows the compatible/tested versions of Stackdriver sidecar with Prometheus.

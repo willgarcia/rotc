@@ -44,12 +44,6 @@ tasks:
       container: terraform
       command: scripts/apply-terraform.sh
 
-  setup-cluster:
-    description: Cluster post-installation tasks (Prometheus/Stackdriver integration)
-    run:
-      container: terraform
-      command: scripts/prometheus/gke/prometheus-stackdriver.sh deployment prometheus-deployment
-
   destroy-terraform:
     description: Run Terraform to decommission infrastructure.
     run:
