@@ -39,6 +39,24 @@ The output should be similar to this:
 ```output
 helloWorld42+
 ```
+## Secrets are encoded, but not encrypted
+It is  important to note that secrets are not encrypted by default (they are only encoded)
+
+Display the contents of the secret we have just created
+```output
+kubectl get secret my-secret -o yaml
+```
+
+Decode the secret
+
+```output
+echo -n '*.......*==' | base64 -D
+```
+The output should be
+
+```output
+helloWorld42+
+```
 
 NOTE: Config Maps and secrets in Kubernetes do not signal pods when new key/values are available. Pods will have to be restarted after adding or updating them.
 
