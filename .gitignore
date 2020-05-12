@@ -4,3 +4,4 @@ tf.plan
 *.tgz
 index.yaml
 gh-md-toc
+node_modules/
