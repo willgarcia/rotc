@@ -86,7 +86,7 @@ resource "google_container_node_pool" "node_pool" {
   location = google_container_cluster.cluster.location
 
   // This is per zone, so the cluster will have number of zones (eg. 3) x node_count nodes
-  node_count = 1
+  node_count = 2
 
   version = var.cluster_version
 
