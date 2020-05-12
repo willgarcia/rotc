@@ -1,0 +1,55 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: demo-ingress
+  namespace: demo-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+  - host: dockercoins.wigarcia.com
+    http:
+      paths:
+      - backend:
+          serviceName: simpleapp
+          servicePort: 8082
+        path: /v1
+      - backend:
+          serviceName: dockercoins
+          servicePort: 80
+        path: /v2/(.*)
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: simpleapp
+  namespace: demo-ingress
+spec:
+  ports:
+  - port: 8082
+    protocol: TCP
+    targetPort: 8082
+  selector:
+    app: simpleapp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simpleapp
+  namespace: demo-ingress
+spec:
+  selector:
+    matchLabels:
+      app: simpleapp
+  template:
+    metadata:
+      labels:
+        app: simpleapp
+    spec:
+      containers:
+      - name: simpleapp
+        image: rotcaus/prometheus-app
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8082
