@@ -1,4 +1,4 @@
-# Secrets
+# 03-02 Kubernetes Secrets
 
 You will learn about:
 
@@ -35,6 +35,24 @@ kubectl logs pod/secret-app
 ```
 
 The output should be similar to this:
+
+```output
+helloWorld42+
+```
+## Secrets are encoded, but not encrypted
+It is  important to note that secrets are not encrypted by default (they are only encoded)
+
+Display the contents of the secret we have just created
+```output
+kubectl get secret my-secret -o yaml
+```
+
+Decode the secret
+
+```output
+echo -n '*.......*==' | base64 -D
+```
+The output should be
 
 ```output
 helloWorld42+

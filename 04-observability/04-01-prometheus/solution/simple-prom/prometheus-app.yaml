@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simpleprom
+spec:
+  selector:
+    matchLabels:
+      app: simpleprom
+  template:
+    metadata:
+      labels:
+        app: simpleprom
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "8082"
+    spec:
+      containers:
+      - name: simpleprom
+        image: rotcaus/prometheus-app
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8082

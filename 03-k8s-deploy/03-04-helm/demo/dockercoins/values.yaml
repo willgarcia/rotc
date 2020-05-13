@@ -1,0 +1,27 @@
+# Default values for dockercoins.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  webui:
+    repository: rotcaus/dockercoins_webui
+    tag: v1
+  rng:
+    repository: rotcaus/dockercoins_rng
+    tag: v1
+  hasher:
+    repository: rotcaus/dockercoins_hasher
+    tag: v1
+  worker:
+    repository: rotcaus/dockercoins_worker
+    tag: v1
+  redis:
+    repository: redis
+    tag: latest
+
+service:
+  type: LoadBalancer
+  port: 80
+

@@ -53,6 +53,4 @@ Push to Docker hub:
 > docker push sesh/basehtml:2019-08-22_1
 ```
 
-If time, try to push to Github or GCP registry.
-
-Docker Compose: /Users/brenton/Dev/personal/bookmarks
+If time, try to push to Docker hub.

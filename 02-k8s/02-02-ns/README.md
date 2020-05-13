@@ -1,4 +1,4 @@
-# Namespaces
+# 02-02 Kubernetes namespaces
 
 Pods in a Kubernetes are located in [namespaces](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/), a grouping used to organise and isolate pods per team, product, or environment.
 

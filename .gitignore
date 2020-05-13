@@ -1,3 +1,7 @@
 .build/.gcloud/
 .build/.terraform/
 tf.plan
+*.tgz
+index.yaml
+gh-md-toc
+node_modules/

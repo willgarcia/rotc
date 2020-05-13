@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-dockercoins
+  labels:
+    app: {{ .Release.Name }}-dockercoins
+    version: v1
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-dockercoins
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-dockercoins
+        version: v1
+    spec:
+      containers:
+      - name: dockercoins
+        image: "{{ .Values.image.webui.repository }}:{{ .Values.image.webui.tag }}"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+      - name: rng
+        image: "{{ .Values.image.rng.repository }}:{{ .Values.image.rng.tag }}"
+        ports:
+        - containerPort: 3001
+      - name: hasher
+        image: "{{ .Values.image.hasher.repository }}:{{ .Values.image.hasher.tag }}"
+        ports:
+        - containerPort: 3000
+      - name: worker
+        image: "{{ .Values.image.worker.repository }}:{{ .Values.image.worker.tag }}"
+      - name: redis
+        image: "{{ .Values.image.redis.repository }}:{{ .Values.image.redis.tag }}"
+        ports:
+          - containerPort: 6379

@@ -1,4 +1,4 @@
-# Replica set
+# 02-04 Kubernetes replica set
 
 ## Create a replica set
 

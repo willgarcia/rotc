@@ -1,4 +1,4 @@
-# Kubectl
+# 02-01 Kubectl
 
 In this module, we introduce `kubectl` to access a remote Kubernetes cluster.
 
@@ -7,9 +7,11 @@ You will learn about:
 - Kubernetes' main components
 - kubectl, the Kubernetes CLI client used to interact with any Kubernetes cluster
 
-
 ## Setup
-We have configured an existing Kubernetes cluster that is running on the Google Cloud Platform (GCP).
+
+Depending on where the Kubernetes, follow the following instructions to get access to the cluster.
+
+### GCP
 
     ```bash
     # Windows
@@ -24,10 +26,23 @@ We have configured an existing Kubernetes cluster that is running on the Google 
     gcloud auth login
     gcloud auth application-default login
 
-    # Set the current Project
-    gcloud config set project rotc-22-04
+    gcloud container clusters get-credentials k8s-cluster --region australia-southeast1-a --project rotcaus
+    ```
 
-    gcloud container clusters get-credentials k8s-cluster --region australia-southeast1 --project rotc-22-04
+### Azure
+
+    ```bash
+    # Windows
+    choco upgrade azure-cli
+
+    # MacOS
+    brew cask install azure-cli
+    ```
+
+    ```console
+    az login
+
+    az aks get-credentials --name rotcaus-aks --resource-group rotcaus
     ```
 
 ## Start

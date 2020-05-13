@@ -7,6 +7,9 @@ containers:
       - local: .
         container: /code
         options: cached
+      - local: ~/.kube/config
+        container: /root/.kube/config
+        options: cached
       - local: .gcloud
         container: /root/.config/gcloud
         options: cached
@@ -14,9 +17,13 @@ containers:
         container: /var/run/docker.sock
     working_directory: /code
     environment:
-      CLOUDSDK_CORE_PROJECT: riseofthecontainers
+      CLUSTER_NAME: k8s-cluster
+      CLUSTER_VERSION: 1.15.11-gke.5
+      CLUSTER_LOCATION: australia-southeast1-a
       CLOUDSDK_COMPUTE_REGION: australia-southeast1
-      GOOGLE_BILLING_ACCOUNT_ID: TO-REPLACE
+      # CLOUDSDK_CORE_PROJECT: rotcaus
+      CLOUDSDK_CORE_PROJECT: servicemeshlab
+      GOOGLE_BILLING_ACCOUNT_ID: 01A73F-4983F0-0FC3DE
 
 tasks:
   setup-gcp:
@@ -32,19 +39,31 @@ tasks:
       command: scripts/initialize.sh
 
   apply-terraform:
-    description: Run Terraform to provision infrastructure.
+    description: Run Terraform and post-install tasks to provision infrastructure.
     run:
       container: terraform
-      command: sh -c 'terraform plan -out tf.plan cluster && terraform apply -input=false -auto-approve tf.plan'
+      command: scripts/apply-terraform.sh
 
   destroy-terraform:
-    description: Run Terraform to provision infrastructure.
+    description: Run Terraform to decommission infrastructure.
     run:
       container: terraform
       command: terraform destroy -input=false -auto-approve cluster
+
+  cluster-auth:
+    description: Get credentials to access the newly created Kubernetes cluster
+    run:
+      container: terraform
+      command: sh -c "gcloud container clusters get-credentials "${CLUSTER_NAME}" --region "${CLUSTER_LOCATION}" --project ${CLOUDSDK_CORE_PROJECT}"
 
   shell:
     description: Run a shell in the Terraform environment.
     run:
       container: terraform
       command: bash
+
+  grafana:
+    description: Enable access to Grafana UI
+    run:
+      container: terraform
+      command: scripts/grafana.sh

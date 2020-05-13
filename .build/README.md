@@ -25,13 +25,17 @@ Run to create infrastructure and every time you want to update the infrastructur
 
 Note: You may get errors relating to the cluster_node_version or cluster master version. To list the supported versions in GCP run `gcloud container get-server-config --zone australia-southeast1`. You then need to update the terraform `cluster.tf`
 
-Run to create and upload all artifacts used during exercises (eg. Docker images, Helm charts):
+* Confirm that you can access the cluster with:
 
-* `./scripts/setup-cluster.sh`
+```bash
+./batect cluster-auth
+```
 
-Run to create a .zip file of the exercises, ready for distribution to attendees:
+* Run to create and upload all artifacts used during exercises (eg. Docker images, Helm charts):
 
-* `./scripts/create-zip.sh`
+Install gsutil from <https://cloud.google.com/storage/docs/gsutil_install> and run:
+
+`./scripts/post-install.sh`
 
 ## Post-workshop
 

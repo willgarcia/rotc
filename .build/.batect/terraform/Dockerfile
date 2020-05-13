@@ -25,3 +25,9 @@ ENV TERRAFORM_VERSION=0.12.6
 RUN wget -q -O /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     unzip /tmp/terraform.zip -d /usr/local/bin && \
     rm /tmp/terraform.zip
+
+ENV HELM_VERSION=3.0.0
+RUN curl -L https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz |tar xvz && \
+    mv linux-amd64/helm /usr/bin/helm && \
+    chmod +x /usr/bin/helm && \
+    rm -rf linux-amd64
