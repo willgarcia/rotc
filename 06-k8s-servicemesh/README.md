@@ -1,6 +1,6 @@
 # Service mesh features
 
-This section contains examples that demonstrate istio features.
+This section contains examples that demonstrate istio features. 
 
 ## Getting started
 
