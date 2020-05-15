@@ -3,7 +3,7 @@
 The examples are based on the istio setup guide.
 
 * Istio uses the [VirtualService](https://istio.io/docs/reference/config/networking/virtual-service/) component to handle traffic management.
-* Routing rules are defined in the [VirtualService](https://istio.io/docs/reference/config/networking/virtual-service/). A routing rule contains a [Match condition](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPMatchRequest) and an action
+* Routing rules can be defined in a [VirtualService](https://istio.io/docs/reference/config/networking/virtual-service/). A routing rule contains a [Match condition](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPMatchRequest) and an action
 * Traffic can be routed based on:
   * A URI 
   * Http Methods 
