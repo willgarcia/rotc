@@ -16,8 +16,15 @@ The examples are based on the istio setup guide.
 * We will use a [Match condition](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPMatchRequest) to illustrate how we can route to specific service versions based on a defined set of rules.
 
 ## Exercise 1
+We will route all traffic to version 1 of the reviews service
 
-Using [HTTPMatchRequest](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPMatchRequest). 
+```
+kubectl apply -f exercise/simple-routing.yaml
+```
+
+## Exercise 2
+In this example will route traffic based on a rule defined in a
+[HTTPMatchRequest](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPMatchRequest). 
 * The productpage service extracts user information from the session and use it to construct a custom header, 'end-user'. This header is then read by a match condition.
 
 ```
@@ -37,25 +44,15 @@ Using [HTTPMatchRequest](https://istio.io/docs/reference/config/networking/virtu
 ### Implement
 
 ```
-kubectl apply -f exercise/request-header.yaml
+kubectl apply -f exercise/rule-based-routing.yaml
 ```
 
-## Exercise 2
-
-Using [DestinationRule](https://istio.io/docs/reference/config/networking/destination-rule/)
-
-
-### Implement
-
-```
-kubectl apply -f exercise/destination-rule.yaml
-```
 
 View the webpage
 
 ### Clean up
 
 ```
-kubectl delete -f exercise/request-header.yaml
-kubectl delete -f exercise/destination-rule.yaml
+kubectl delete -f exercise/simple-routing.yaml
+kubectl delete -f exercise/rule-based-routing.yaml
 ```
