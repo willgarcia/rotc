@@ -2,14 +2,39 @@
 
 The examples are based on the istio setup guide.
 
-Istio [VirtualService](https://istio.io/docs/reference/config/networking/virtual-service/)
-Routes requests and can be used to implement feature toggling.
+* Istio uses the [VirtualService](https://istio.io/docs/reference/config/networking/virtual-service/) component to handle traffic management.
+* Routing rules can be defined in a [VirtualService](https://istio.io/docs/reference/config/networking/virtual-service/). A routing rule contains a [Match condition](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPMatchRequest) and an action
+* Traffic can be routed based on:
+  * A URI 
+  * Http Methods 
+  * Headers 
+  * Port 
+  * Queryparmas
+
+
+
+* We will use a [Match condition](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPMatchRequest) to illustrate how we can route to specific service versions based on a defined set of rules.
 
 ## Exercise 1
+We will route all traffic to version 1 of the reviews service
 
-Using [HTTPMatchRequest](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPMatchRequest). 
-* Extract user information from the session and use it to construct a custom header.
-* HTTPMatchRequest then forwards the request to the appropriate Reviews service version based on the rule:
+```
+kubectl apply -f exercise/simple-routing.yaml
+```
+
+## Exercise 2
+In this example will route traffic based on a rule defined in a
+[HTTPMatchRequest](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPMatchRequest). 
+* The productpage service extracts user information from the session and use it to construct a custom header, 'end-user'. This header is then read by a match condition.
+
+```
+- match:
+   - headers:
+       end-user:
+         exact: version-2-user
+```
+
+* The request is then routed to the appropriate Reviews service version based on the rule:
 ```
     route:
     - destination:
@@ -19,28 +44,15 @@ Using [HTTPMatchRequest](https://istio.io/docs/reference/config/networking/virtu
 ### Implement
 
 ```
-kubectl apply -f exercise/request-header.yaml
+kubectl apply -f exercise/rule-based-routing.yaml
 ```
 
-## Exercise 2
-
-Using [DestinationRule](https://istio.io/docs/reference/config/networking/destination-rule/)
-
-
-### Implement
-
-```
-kubectl apply -f exercise/destination-rule.yaml
-```
 
 View the webpage
 
 ### Clean up
 
 ```
-kubectl delete -f exercise/request-header.yaml
-```
-
-```
-kubectl delete -f exercise/destination-rule.yaml
+kubectl delete -f exercise/simple-routing.yaml
+kubectl delete -f exercise/rule-based-routing.yaml
 ```
