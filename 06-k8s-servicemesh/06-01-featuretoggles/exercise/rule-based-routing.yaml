@@ -9,7 +9,7 @@ spec:
   - match:
     - headers:
         end-user:
-          exact: new-service-version
+          exact: jason
     route:
     - destination:
         host: reviews
