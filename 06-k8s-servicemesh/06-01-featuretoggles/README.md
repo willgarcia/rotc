@@ -36,10 +36,6 @@ reviews-v2-568c7c9d8f-p5wrj       2/2     Running   1          20m29s
 reviews-v3-67b4988599-7nhwz       2/2     Running   1          20m29s
 ```
 
-
-A VirtualService defines a set of traffic routing rules to apply when a host is addressed. Each routing rule defines matching criteria for traffic of a specific protocol. If the traffic is matched, then it is sent to a named destination service (or subset/version of it) defined in the registry.
-
-
 * Istio uses the [VirtualService](https://istio.io/docs/reference/config/networking/virtual-service/) component to handle traffic management.
 * A VirtualService defines a set of traffic routing rules to apply when a host is addressed. If the traffic is matched, then it is sent to a named destination service (or subset/version of it) defined in the registry.
 * Traffic can be routed based on:

@@ -40,8 +40,21 @@ and login with the default username *admin* and default password *admin*.
 
 <br>
 
-1. Route all traffic to version 1 of the microservice.
-
+1. The *traffic-shifting-v1.yaml* file will route all traffic to reviews:v1:
+```
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+  - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v1
+```
+Apply the file:
 ```
 kubectl apply -f exercise/traffic-shifting-v1.yaml
 ```
@@ -51,8 +64,27 @@ Notice that the reviews part of the page displays with no rating stars, no matte
 - Open the Kiali dashboard.
 Refresh the Bookinfo app a few times. After a few seconds, you will see that 100% of traffic is routed to reviews:v1.
 
-2. Transfer 50% of the traffic from reviews:v1 to reviews:v3 with the following command:
+2. The *traffic-shifting-50-v3.yaml* file will transfer 50% of the traffic from reviews:v1 to reviews:v3:
 
+```
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v1
+      weight: 50
+    - destination:
+        host: reviews
+        subset: v3
+      weight: 50
+```
+Apply the file:
 ```
 kubectl apply -f exercise/traffic-shifting-50-v3.yaml
 ```
@@ -63,8 +95,21 @@ kubectl apply -f exercise/traffic-shifting-50-v3.yaml
 - Open the Kiali dashboard.  
 Refresh the Bookinfo app a few times. After a few seconds, you will see that approximately 50% of traffic is routed to reviews:v1 and reviews:v3.
 
-3. Transfer 100% of the traffic to version 3.
-
+3. The *traffic-shifting-v3.yaml* file will route 100% of the traffic to reviews:v3:
+```
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v3
+```
+Apply the file:
 ```
 kubectl apply -f exercise/traffic-shifting-v3.yaml
 ```
