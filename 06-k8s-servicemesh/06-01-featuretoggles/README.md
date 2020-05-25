@@ -75,6 +75,8 @@ kubectl apply -f exercise/simple-routing.yaml
 
 Open the /productpage of the Bookinfo app in your browser. You will not see any stars next to the reviews as all traffic is routed to reviews:v1.
 
+### Kiali
+Set up Kiali to easily visualise traffic routes.  
 Run 
 ```
 istioctl dashboard kiali
@@ -94,8 +96,7 @@ The *rule-based-routing.yaml* file uses a [HTTPMatchRequest](https://istio.io/do
 
 The productpage service extracts user information from the session and uses it to construct a custom header, 'end-user'. This header is then read by a match condition.
 
-When a user logs in as jason, all routes addressed to reviews will be directed to version 2.
-
+When a user logs in as jason, all routes addressed to reviews will be directed to version 2.  
 For everyone else, the routes addressed to reviews will be directed to version 1.
 
 ```
@@ -126,10 +127,12 @@ kubectl apply -f exercise/rule-based-routing.yaml
 ```
 
 On the /productpage of the Bookinfo app, log in as user jason. 
-- Refresh the browser. The star ratings will appear next to each review. You are seeing reviews:v2.
+- Refresh the browser.  
+The star ratings will appear next to each review. You are seeing reviews:v2.
 
 Now log in as another user (pick any name). 
-- Refresh the browser. The star ratings are gone as traffic is routed to reviews:v1 for all users except jason.
+- Refresh the browser.  
+The star ratings are gone as traffic is routed to reviews:v1 for all users except jason.
 
 ### Clean up
 
