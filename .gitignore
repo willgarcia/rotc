@@ -5,3 +5,5 @@ tf.plan
 index.yaml
 gh-md-toc
 node_modules/
+*.tfstate.*
+*.tfstate
