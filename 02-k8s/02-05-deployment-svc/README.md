@@ -1,5 +1,27 @@
 # 02-05 Kubernetes Deployment and Service
 
+## Pre-requisites
+
+### kubectl
+
+```bash
+brew install kubernetes-cli
+```
+
+### Kubernetes cluster
+
+If you need to run this exercise locally, use minikube:
+
+```bash
+brew install minikube
+```
+
+And create a local cluster with this command:
+
+```bash
+minikube start -p demo
+```
+
 ## Create a deployment
 
 Before starting, take a look at the YAML definition of the deployment:
@@ -91,7 +113,7 @@ With minikube, to access the app, run the following command:
 minikube service dockercoins -n [namespace] -p [minikube-profile-name]
 ```
 
-Once the EXTERNAL-IP shows a valid IP (instead of pending), you should be able to access the application on <http://[EXTERNAL-IP[]>!
+With a Cloud cluster, once the EXTERNAL-IP shows a valid IP (instead of pending), you should be able to access the application on <http://[EXTERNAL-IP[]>!
 
 Services in Kubernetes open the cluster communication to the outside world.
 
