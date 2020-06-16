@@ -22,6 +22,18 @@ And create a local cluster with this command:
 minikube start -p demo
 ```
 
+## Create a namespace
+
+```bash
+kubectl create ns myapp
+```
+
+Use the newly created namespace as your default namespace:
+
+```bash
+kubectl config set-context --current --namespace=myapp
+```
+
 ## Create a deployment
 
 Before starting, take a look at the YAML definition of the deployment:
