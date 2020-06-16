@@ -85,6 +85,12 @@ The service is being created and can be list with:
 kubectl get svc -w
 ```
 
+With minikube, to access the app, run the following command:
+
+```bash
+minikube service dockercoins -n [namespace] -p [minikube-profile-name]
+```
+
 Once the EXTERNAL-IP shows a valid IP (instead of pending), you should be able to access the application on <http://[EXTERNAL-IP[]>!
 
 Services in Kubernetes open the cluster communication to the outside world.
