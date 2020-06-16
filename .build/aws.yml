@@ -1,0 +1,38 @@
+project_name: uber-k8s
+
+containers:
+  terraform:
+    build_directory: .batect/terraform
+    volumes:
+      - local: .
+        container: /code
+        options: cached
+      - local: ~/.kube/config
+        container: /root/.kube/config
+        options: cached
+      - local: ~/.aws
+        container: /root/.aws
+        options: cached
+      - local: /var/run/docker.sock
+        container: /var/run/docker.sock
+    working_directory: /code
+#    environment:
+
+tasks:
+  setup-terraform:
+    description: Initialise Terraform.
+    run:
+      container: terraform
+      command: terraform init -input=false cluster/aws
+
+  apply-terraform:
+    description: Run Terraform and post-install tasks to provision infrastructure.
+    run:
+      container: terraform
+      command: terraform apply -input=false -auto-approve cluster/aws
+
+  destroy-terraform:
+    description: Run Terraform to decommission infrastructure.
+    run:
+      container: terraform
+      command: terraform destroy -input=false -auto-approve cluster/aws

@@ -51,7 +51,15 @@ With this configuration, the request flow looks like:
 To test the Istio Bookinfo application microservices for resiliency, inject a 7 second delay between reviews:v2 and ratings microservices for the user 'jason'.
 
 ### Configure the rule
-1. Create a fault injection rule to delay traffic coming from the test user jason:
+1. Create a fault injection rule to delay traffic coming from the test user jason.
+```
+fault:
+  delay:
+    percentage:
+      value: 100.0
+    fixedDelay: 7s
+```
+Apply the rule:
 ```
 kubectl apply -f exercise/ratings-test-delay.yaml
 ```
@@ -110,7 +118,15 @@ Ratings service is currently unavailable
 ```
 
 ### Configure the rule
-1. Create a fault injection rule to send a HTTP abort for user jason:
+1. Create a fault injection rule to send a HTTP abort for user jason.
+```
+fault:
+  abort:
+    percentage:
+      value: 100.0
+    httpStatus: 500
+```
+Apply the rule:
 ```
 kubectl apply -f exercise/ratings-test-abort.yaml
 ```
