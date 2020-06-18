@@ -10,7 +10,6 @@ resource "aws_eks_cluster" "servicemesh_eks_cluster" {
   vpc_config {
     subnet_ids = ["${aws_subnet.servicemesh_subnet_1.id}", "${aws_subnet.servicemesh_subnet_2.id}"]
     endpoint_private_access = "true"
-    security_group_ids = ["${aws_security_group.servicemesh_sg.id}"]
   }
 
   tags = {
