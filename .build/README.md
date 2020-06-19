@@ -2,6 +2,11 @@
 
 This file contains instructions for instructors to create all of the resources used during the workshop.
 
+## AWS
+
+### Install Istio
+* Run `./batect -f aws.yml install-istio` to install istio
+
 ## Prerequisites
 
 * Google Cloud account
