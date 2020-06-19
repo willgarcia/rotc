@@ -7,3 +7,4 @@ gh-md-toc
 node_modules/
 *.tfstate.*
 *.tfstate
+.vscode/settings.json
