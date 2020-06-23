@@ -7,6 +7,16 @@ RUN apk add --no-cache \
     docker \
     python2
 
+ENV TERRAFORM_VERSION=0.12.6
+RUN wget -q -O /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
+    unzip /tmp/terraform.zip -d /usr/local/bin && \
+    rm /tmp/terraform.zip
+
+RUN apk -v --update add py-pip && \
+    pip install --upgrade awscli && \
+    apk -v --purge del py-pip && \
+    rm /var/cache/apk/*
+
 # Based on https://github.com/GoogleCloudPlatform/cloud-sdk-docker/blob/master/alpine/Dockerfile.
 ENV CLOUD_SDK_VERSION=258.0.0
 
@@ -17,18 +27,4 @@ RUN curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cl
 ENV PATH /google-cloud-sdk/bin:$PATH
 
 RUN gcloud components install \
-    beta \
-    kubectl \
-    docker-credential-gcr
-
-ENV TERRAFORM_VERSION=0.12.6
-RUN wget -q -O /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
-    unzip /tmp/terraform.zip -d /usr/local/bin && \
-    rm /tmp/terraform.zip
-
-ENV HELM_VERSION=3.0.0
-RUN curl -L https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz |tar xvz && \
-    mv linux-amd64/helm /usr/bin/helm && \
-    chmod +x /usr/bin/helm && \
-    rm -rf linux-amd64
-
+    kubectl

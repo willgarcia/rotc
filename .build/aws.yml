@@ -2,7 +2,7 @@ project_name: uber-k8s
 
 containers:
   terraform:
-    build_directory: .batect/terraform
+    build_directory: .batect/aws
     volumes:
       - local: .
         container: /code
@@ -54,3 +54,9 @@ tasks:
     run:
       container: terraform
       command: ./scripts/aws/install-istio.sh
+
+  test:
+    description: Install istio using istioctl
+    run:
+      container: terraform
+      command: ./scripts/aws/test.sh
