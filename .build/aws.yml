@@ -55,8 +55,8 @@ tasks:
       container: terraform
       command: ./scripts/aws/install-istio.sh
 
-  test:
-    description: Install istio using istioctl
+  install-bookinfo:
+    description: Install Istio's bookinfo app
     run:
       container: terraform
-      command: ./scripts/aws/test.sh
+      command: ./scripts/aws/install-bookinfo.sh
