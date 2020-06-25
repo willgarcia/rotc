@@ -5,7 +5,7 @@ This file contains instructions for instructors to create all of the resources u
 ## AWS
 
 ### Install Istio
-* Run `./batect -f aws.yml install-istio` to install istio
+* Run `./batect -f aws.yml install-istio` to install Istio and deploy the Bookinfo Application
 
 ## Prerequisites
 
