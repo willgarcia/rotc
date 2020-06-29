@@ -3,9 +3,15 @@
 This file contains instructions for instructors to create all of the resources used during the workshop.
 
 ## AWS
+* Login with AWS credentials
+* Run `./batect -f aws.yml apply-terraform` to set up the AWS environment for a service mesh
 
-### Install Istio
+#### Install Istio
 * Run `./batect -f aws.yml install-istio` to install Istio and deploy the Bookinfo Application
+
+* Run `./batect -f aws.yml shell` to open a shell inside the cluster
+
+* Run `./batect -f aws.yml destroy-terraform` to destroy the environment
 
 ## Prerequisites
 
