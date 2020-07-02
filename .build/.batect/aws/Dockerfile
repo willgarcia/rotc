@@ -5,7 +5,8 @@ RUN apk add --no-cache \
     ca-certificates \
     curl \
     docker \
-    python2
+    python2 \
+    git
 
 ENV TERRAFORM_VERSION=0.12.6
 RUN wget -q -O /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
@@ -18,7 +19,7 @@ RUN apk -v --update add py-pip && \
     rm /var/cache/apk/*
 
 # Based on https://github.com/GoogleCloudPlatform/cloud-sdk-docker/blob/master/alpine/Dockerfile.
-ENV CLOUD_SDK_VERSION=258.0.0
+ENV CLOUD_SDK_VERSION=298.0.0
 
 RUN curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-${CLOUD_SDK_VERSION}-linux-x86_64.tar.gz && \
     tar xzf google-cloud-sdk-${CLOUD_SDK_VERSION}-linux-x86_64.tar.gz && \
