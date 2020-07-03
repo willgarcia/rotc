@@ -1,16 +1,13 @@
 variable "region" {
   type = string
-  default = "us-east-1"
 }
 
 variable "availability_zone_1" {
   type = string
-  default = "us-east-1a"
 }
 
 variable "availability_zone_2" {
   type = string
-  default = "us-east-1b"
 }
 
 variable "profile" {
@@ -20,5 +17,18 @@ variable "profile" {
 
 variable "cluster_name" {
   type = string
-  default = "servicemesh_eks_cluster"
 }
+
+variable "subnet_ids" {
+  type = list(string)
+}
+
+
+variable "cluster_role_arn" {
+  type = string
+}
+
+variable "cluster_node_role_arn" {
+  type = string
+}
+

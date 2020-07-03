@@ -1,3 +1,9 @@
+locals {
+    cluster_tags = { for cluster in var.cluster_names : 
+        "kubernetes.io/cluster/${cluster}" => "shared"
+    }
+}
+
 resource "aws_vpc" "servicemesh_vpc" {
   cidr_block = "10.0.0.0/16"
 
@@ -12,10 +18,7 @@ resource "aws_subnet" "servicemesh_subnet_1" {
   availability_zone = "${var.availability_zone_1}"
   map_public_ip_on_launch = "true"
 
-  tags = {
-    Name = "servicemesh_subnet_1_public"
-    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
-  }
+  tags = merge({ Name = "servicemesh_subnet_1_public" }, local.cluster_tags)
 }
 
 resource "aws_subnet" "servicemesh_subnet_2" {
@@ -24,10 +27,7 @@ resource "aws_subnet" "servicemesh_subnet_2" {
   availability_zone = "${var.availability_zone_2}"
   map_public_ip_on_launch = "true"
 
-  tags = {
-    Name = "servicemesh_subnet_2_public"
-    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
-  }
+  tags = merge({ Name = "servicemesh_subnet_2_public" }, local.cluster_tags)
 }
 
 resource "aws_internet_gateway" "servicemesh_igw" {
