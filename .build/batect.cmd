@@ -2,11 +2,11 @@
 rem This file is part of batect.
 rem Do not modify this file, it will be overwritten next time you upgrade batect.
 rem You should commit this file to version control alongside the rest of your project. It should not be installed globally.
-rem For more information, visit https://github.com/charleskorn/batect.
+rem For more information, visit https://github.com/batect/batect.
 
 setlocal EnableDelayedExpansion
 
-set "version=0.36.0"
+set "version=0.55.0"
 
 if "%BATECT_CACHE_DIR%" == "" (
     set "BATECT_CACHE_DIR=%USERPROFILE%\.batect\cache"
@@ -22,7 +22,7 @@ $ErrorActionPreference = 'Stop'^
 
 ^
 
-$Version='0.36.0'^
+$Version='0.55.0'^
 
 ^
 
@@ -42,19 +42,21 @@ function getValueOrDefault($value, $default) {^
 
 ^
 
-$DownloadUrlRoot = getValueOrDefault $env:BATECT_DOWNLOAD_URL_ROOT "https://dl.bintray.com/charleskorn/batect"^
+$DownloadUrlRoot = getValueOrDefault $env:BATECT_DOWNLOAD_URL_ROOT "https://dl.bintray.com/batect/batect"^
 
 $UrlEncodedVersion = [Uri]::EscapeDataString($Version)^
 
 $DownloadUrl = getValueOrDefault $env:BATECT_DOWNLOAD_URL "$DownloadUrlRoot/$UrlEncodedVersion/bin/batect-$UrlEncodedVersion.jar"^
 
+$ExpectedChecksum = getValueOrDefault $env:BATECT_DOWNLOAD_CHECKSUM '92a72ccab0574d61a251cefbfa00ed9a4640a95ad4001a383dad1be8bcc95523'^
+
 ^
 
 $RootCacheDir = getValueOrDefault $env:BATECT_CACHE_DIR "$env:USERPROFILE\.batect\cache"^
 
-$CacheDir = "$RootCacheDir\$Version"^
+$VersionCacheDir = "$RootCacheDir\$Version"^
 
-$JarPath = "$CacheDir\batect-$Version.jar"^
+$JarPath = "$VersionCacheDir\batect-$Version.jar"^
 
 ^
 
@@ -67,6 +69,8 @@ function main() {^
     }^
 
 ^
+
+    checkChecksum^
 
     runApplication @args^
 
@@ -130,11 +134,29 @@ function download() {^
 
 ^
 
+function checkChecksum() {^
+
+    $localChecksum = (Get-FileHash -Algorithm 'SHA256' $JarPath).Hash.ToLower()^
+
+^
+
+    if ($localChecksum -ne $expectedChecksum) {^
+
+        Write-Host -ForegroundColor Red "The downloaded version of batect does not have the expected checksum. Delete '$JarPath' and then re-run this script to download it again."^
+
+        exit 1^
+
+    }^
+
+}^
+
+^
+
 function createCacheDir() {^
 
-    if (-not (Test-Path $CacheDir)) {^
+    if (-not (Test-Path $VersionCacheDir)) {^
 
-        New-Item -ItemType Directory -Path $CacheDir ^| Out-Null^
+        New-Item -ItemType Directory -Path $VersionCacheDir ^| Out-Null^
 
     }^
 
@@ -165,6 +187,8 @@ function runApplication() {^
     $combinedArgs = $javaArgs + @("-Djava.net.useSystemProxies=true", "-jar", $JarPath) + $args^
 
     $env:HOSTNAME = $env:COMPUTERNAME^
+
+    $env:BATECT_WRAPPER_CACHE_DIR = $RootCacheDir^
 
 ^
 
