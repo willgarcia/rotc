@@ -17,6 +17,22 @@ containers:
         container: /var/run/docker.sock
     working_directory: /code
 #    environment:
+  aws_login:
+    build_directory: .batect/aws_login
+    volumes:
+      - local: .
+        container: /code
+        options: cached
+      - local: ~/.aws
+        container: /root/.aws
+        options: cached
+      - local: /var/run/docker.sock
+        container: /var/run/docker.sock
+    working_directory: /root
+    environment:
+      AWS_PROFILE: dev
+      AWS_SDK_LOAD_CONFIG: 1
+
 
 tasks:
   setup-terraform:
@@ -54,3 +70,9 @@ tasks:
     run:
       container: terraform
       command: ./scripts/aws/install-istio.sh
+  
+  login_aws:
+    description: Login aws using OKTA. Will override your .aws/credentials file
+    run:
+      container: aws_login
+      command: ./../code/scripts/aws/aws_login.sh
