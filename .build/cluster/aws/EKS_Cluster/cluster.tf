@@ -1,8 +1,3 @@
-resource "aws_s3_bucket" "servicemesh_bucket" {
-  bucket = "servicemesh-bucket-1"
-  acl    = "private"
-}
-
 resource "aws_eks_cluster" "servicemesh_eks_cluster" {
   name     = "${var.cluster_name}"
   role_arn = aws_iam_role.eks_cluster_role.arn

@@ -16,7 +16,9 @@ containers:
       - local: /var/run/docker.sock
         container: /var/run/docker.sock
     working_directory: /code
-#    environment:
+    environment:
+      AWS_PROFILE: dev
+      AWS_SDK_LOAD_CONFIG: 1
   aws_login:
     build_directory: .batect/aws_login
     volumes:
