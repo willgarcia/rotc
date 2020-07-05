@@ -3,7 +3,10 @@
 This file contains instructions for instructors to create all of the resources used during the workshop.
 
 ## AWS
-* Login with AWS credentials
+* Run `./batect -f aws.yml login_aws` to set up the AWS credentials - this will overwrite your local AWS config
+
+* Run `./batect -f aws.yml setup-terraform` to get your terraform environment ready
+
 * Run `./batect -f aws.yml apply-terraform` to set up the AWS environment for a service mesh
 
 #### Install Istio
