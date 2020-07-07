@@ -1,5 +1,5 @@
 .build/.gcloud/
-.build/.terraform/
+.build/**/.terraform/
 tf.plan
 *.tgz
 index.yaml
