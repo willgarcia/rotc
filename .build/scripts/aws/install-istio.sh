@@ -1,13 +1,5 @@
 #!/usr/bin/env bash
 
-curl -sL https://git.io/getLatestIstio | sh -
-cd istio*
-
-export PATH=$PWD/bin:$PATH
-echo $PATH
-
-test -x /usr/local/bin/istioctl || cp bin/istioctl /usr/local/bin/
-
 echo "Istio version"
 istioctl version --remote=false
 

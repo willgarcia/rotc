@@ -29,3 +29,7 @@ ENV PATH /google-cloud-sdk/bin:$PATH
 
 RUN gcloud components install \
     kubectl
+
+ENV ISTIO_VERSION=1.6.4
+RUN curl -sL https://git.io/getLatestIstio | sh - 
+ENV PATH /istio-${ISTIO_VERSION}/bin:$PATH
