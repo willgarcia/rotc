@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-echo "Istio version"
+# echo "Istio version"
 istioctl version --remote=false
+ISTIO_VERSION="$(istioctl version --remote=false)"
 
 # 1. Create a kubeconfig for Amazon EKS and verify configuration
 aws eks --region us-east-1 update-kubeconfig --name servicemesh_eks_cluster
@@ -21,7 +22,7 @@ kubectl -n istio-system get pods
 kubectl label namespace default istio-injection=enabled
 
 # 6. Deploy the Bookinfo application
-kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
+kubectl apply -f "../istio-$ISTIO_VERSION/samples/bookinfo/platform/kube/bookinfo.yaml"
 
 # 7. Verify Bookinfo is deployed
 echo "Verifying deployment"
@@ -33,7 +34,7 @@ kubectl exec -it $(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metada
 
 # 9. Open the application to outside traffic
 echo "Opening to outside traffic"
-kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
+kubectl apply -f "../istio-$ISTIO_VERSION/samples/bookinfo/networking/bookinfo-gateway.yaml"
 istioctl analyze
 
 # 10. Set the ingress ports
@@ -45,7 +46,7 @@ export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT
 
 # 11. Apply default destination rules
 echo "Applying default destination rules"
-kubectl apply -f samples/bookinfo/networking/destination-rule-all.yaml
+kubectl apply -f "../istio-$ISTIO_VERSION/samples/bookinfo/networking/destination-rule-all.yaml"
 
 # 12. Get browser address
 echo "Copy this address into your browser to view the Bookinfo product page:"
