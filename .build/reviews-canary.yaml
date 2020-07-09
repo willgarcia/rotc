@@ -23,8 +23,8 @@ spec:
     # container port number or name (optional)
     targetPort: 9080
     # Istio gateways (optional)
-    gateways:
-    - bookinfo-gateway
+    # gateways:
+    # - bookinfo-gateway
     # Istio traffic policy (optional)
     trafficPolicy:
       tls:
