@@ -1,0 +1,80 @@
+project_name: uber-k8s
+
+containers:
+  terraform:
+    build_directory: .batect/azure
+    volumes:
+      - local: .
+        container: /code
+        options: cached
+      - local: ~/.kube/config
+        container: /root/.kube/config
+        options: cached
+      - local: ~/.azure
+        container: /root/.azure
+        options: cached
+      - local: /var/run/docker.sock
+        container: /var/run/docker.sock
+    working_directory: /code
+    environment: {}
+      # AWS_PROFILE: dev
+      # AWS_SDK_LOAD_CONFIG: 1
+  azure_login:
+    build_directory: .batect/azure_login
+    volumes:
+      - local: .
+        container: /code
+        options: cached
+      - local: ~/.azure
+        container: /root/.azure
+        options: cached
+      - local: /var/run/docker.sock
+        container: /var/run/docker.sock
+    working_directory: /root
+    environment: {}
+      # AWS_PROFILE: dev
+      # AWS_SDK_LOAD_CONFIG: 1
+
+
+tasks:
+  setup-terraform:
+    description: Initialise Terraform.
+    run:
+      container: terraform
+      command: terraform init -input=false cluster/azure
+  
+  plan-terraform:
+    description: Create a Terraform execution plan to ensure the set of changes matches your expectations.
+    run:
+      container: terraform
+      command: terraform plan -input=false cluster/azure
+
+  apply-terraform:
+    description: Run Terraform and post-install tasks to provision infrastructure.
+    run:
+      container: terraform
+      command: terraform apply -input=false -auto-approve cluster/azure
+
+  destroy-terraform:
+    description: Run Terraform to decommission infrastructure.
+    run:
+      container: terraform
+      command: terraform destroy -input=false -auto-approve cluster/azure
+
+  shell:
+    description: Run a shell in the Terraform environment.
+    run:
+      container: terraform
+      command: bash
+
+  install-istio:
+    description: Install istio using istioctl
+    run:
+      container: terraform
+      command: ./scripts/azure/install-istio.sh
+  
+  login_azure:
+    description: Login Azure using OKTA. Will override your .azure/credentials file
+    run:
+      container: terraform
+      command: az login
