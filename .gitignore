@@ -1,5 +1,6 @@
 .build/.gcloud/
 .build/**/.terraform/
+.DS_Store
 tf.plan
 *.tgz
 index.yaml
