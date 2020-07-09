@@ -9,3 +9,4 @@ node_modules/
 *.tfstate.*
 *.tfstate
 .vscode/settings.json
+.envrc

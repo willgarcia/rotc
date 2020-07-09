@@ -8,7 +8,7 @@ provider "azurerm" {
 terraform {
     backend "azurerm" {
         resource_group_name = "terraform-service-mesh"
-        storage_account_name = "stgterra1"
+        # storage_account_name = provide as a backend config variable
         container_name = "tfstate"
         key = "dev"
     }

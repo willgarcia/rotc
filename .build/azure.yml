@@ -16,9 +16,8 @@ containers:
       - local: /var/run/docker.sock
         container: /var/run/docker.sock
     working_directory: /code
-    environment: {}
-      # AWS_PROFILE: dev
-      # AWS_SDK_LOAD_CONFIG: 1
+    environment:
+      TF_CLI_ARGS: -backend-config="storage_account_name=$AZURE_TF_STORAGE_ACCOUNT"
   azure_login:
     build_directory: .batect/azure_login
     volumes:
@@ -41,7 +40,8 @@ tasks:
     description: Initialise Terraform.
     run:
       container: terraform
-      command: terraform init -input=false cluster/azure
+      command: terraform init -input=false -reconfigure cluster/azure
+      
   
   plan-terraform:
     description: Create a Terraform execution plan to ensure the set of changes matches your expectations.

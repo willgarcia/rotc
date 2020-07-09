@@ -2,7 +2,7 @@
 
 This file contains instructions for instructors to create all of the resources used during the workshop.
 
-## AWS
+# AWS
 * Run `./batect -f aws.yml login_aws` to set up the AWS credentials - this will overwrite your local AWS config
 
 * Run `./batect -f aws.yml setup-terraform` to get your terraform environment ready
@@ -16,6 +16,14 @@ This file contains instructions for instructors to create all of the resources u
 
 * Run `./batect -f aws.yml destroy-terraform` to destroy the environment
 
+# Azure
+* Run `./batect -f azure.yml login_azure` to set up the AWS credentials - this will overwrite your local AZure config
+
+* Run `./batect -f azure.yml setup-terraform` to get your terraform environment ready.  This will connect to a storage account and container.  See
+`cluster/azure/terraform-service-mesh.arm` for a template to create in your personal azure subscription.
+
+
+# GCP
 ## Prerequisites
 
 * Google Cloud account
