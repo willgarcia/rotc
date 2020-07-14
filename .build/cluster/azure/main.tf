@@ -18,11 +18,4 @@ module "aks_cluster" {
     source = "./aks_cluster"
     location = var.location
     prefix = var.prefix
-    resource_group_name = "${var.prefix}-k8s-resources"
-
-    aks_service_principal_app_id = "<Service Principal AppId>"
-
-    aks_service_principal_client_secret = "<Service Principal Client Secret>"
-
-    aks_service_principal_object_id = "<Service Principal Object Id>"    
 }
