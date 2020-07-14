@@ -13,3 +13,9 @@ terraform {
         key = "dev"
     }
 }
+
+module "aks_cluster" {
+    source = "./aks_cluster"
+    location = var.location
+    prefix = var.prefix
+}

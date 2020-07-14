@@ -16,8 +16,11 @@ containers:
       - local: /var/run/docker.sock
         container: /var/run/docker.sock
     working_directory: /code
-    environment:
-      TF_CLI_ARGS: -backend-config="storage_account_name=$AZURE_TF_STORAGE_ACCOUNT"
+    environment: 
+      TF_VAR_prefix: $AZURE_PREFIX
+    ports:
+      - local: 8001
+        container: 8001
   azure_login:
     build_directory: .batect/azure_login
     volumes:
@@ -41,7 +44,9 @@ tasks:
     run:
       container: terraform
       command: terraform init -input=false -reconfigure cluster/azure
-      
+      environment:
+        TF_CLI_ARGS: -backend-config="storage_account_name=$AZURE_TF_STORAGE_ACCOUNT"
+        
   
   plan-terraform:
     description: Create a Terraform execution plan to ensure the set of changes matches your expectations.
@@ -76,5 +81,22 @@ tasks:
   login_azure:
     description: Login Azure using OKTA. Will override your .azure/credentials file
     run:
-      container: terraform
+      container: azure_login
       command: az login
+
+  aks_credentials:
+    run: 
+      container: azure_login
+      command: "'az aks get-credentials --resource-group $AZURE_PREFIX-k8s-resources --name $AZURE_PREFIX-k8s'"
+      entrypoint: '/bin/bash -c'
+      environment:
+        AZURE_PREFIX: $AZURE_PREFIX
+  browse_aks:
+    run:
+      container: terraform
+      command: "'az aks browse --disable-browser --listen-address 0.0.0.0 --resource-group $AZURE_PREFIX-k8s-resources --name $AZURE_PREFIX-k8s'"
+      entrypoint: '/bin/bash -c'
+      environment:
+        AZURE_PREFIX: $AZURE_PREFIX
+
+    

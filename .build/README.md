@@ -17,10 +17,25 @@ This file contains instructions for instructors to create all of the resources u
 * Run `./batect -f aws.yml destroy-terraform` to destroy the environment
 
 # Azure
+## Prequisites
+
+* Create a storage account in Azure to hold the TF state file
+* Set up an environment variable AZURE_TF_STORAGE_ACCOUNT with a unique name like '<yourname>stgterra1'
+  * (Optional) Install direnv, and setup a .envrc file to hold the env var.
+      * `brew install direnv`
+      * `EXPORT AZURE_TF_STORAGE_ACCOUNT=<yourname>stgterra`
+
+## Steps
 * Run `./batect -f azure.yml login_azure` to set up the AWS credentials - this will overwrite your local AZure config
 
 * Run `./batect -f azure.yml setup-terraform` to get your terraform environment ready.  This will connect to a storage account and container.  See
 `cluster/azure/terraform-service-mesh.arm` for a template to create in your personal azure subscription.
+
+* Run `./batect -f azure.yml apply-terraform` to setup the cluster
+
+## Browse k8s 
+* Run `./batect -f azure.yml browse-aks`
+
 
 
 # GCP
