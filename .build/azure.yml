@@ -98,7 +98,7 @@ tasks:
       - aks_credentials
     run:
       container: terraform
-      command: /bin/bash
+      command: kubectl
       environment:
         AZURE_PREFIX: $AZURE_PREFIX
 
@@ -111,5 +111,13 @@ tasks:
       ports:
         - local: 8001
           container: 8001
+
+  istioctl:
+    prerequisites:
+      - aks_credentials
+    run:
+      container: terraform
+      command: "istioctl"
+
 
     
