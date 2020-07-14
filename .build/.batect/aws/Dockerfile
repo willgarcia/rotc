@@ -30,6 +30,12 @@ ENV PATH /google-cloud-sdk/bin:$PATH
 RUN gcloud components install \
     kubectl
 
-ENV ISTIO_VERSION=1.6.4
-RUN curl -sL https://git.io/getLatestIstio | sh - 
+ENV ISTIO_VERSION=1.7.0-alpha.0
+RUN curl -sL https://git.io/getLatestIstio | sh -
 ENV PATH /istio-${ISTIO_VERSION}/bin:$PATH
+
+ENV HELM_VERSION=3.2.4
+RUN curl -L https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz |tar xvz && \
+    mv linux-amd64/helm /usr/bin/helm && \
+    chmod +x /usr/bin/helm && \
+    rm -rf linux-amd64

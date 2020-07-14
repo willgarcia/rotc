@@ -1,6 +1,7 @@
 resource "aws_eks_cluster" "servicemesh_eks_cluster" {
   name     = "${var.cluster_name}"
   role_arn = var.cluster_role_arn
+  version  = "1.17"
 
   vpc_config {
     subnet_ids = var.subnet_ids

@@ -42,7 +42,7 @@ tasks:
     run:
       container: terraform
       command: terraform init -input=false cluster/aws
-  
+
   plan-terraform:
     description: Create a Terraform execution plan to ensure the set of changes matches your expectations.
     run:
@@ -72,7 +72,19 @@ tasks:
     run:
       container: terraform
       command: ./scripts/aws/install-istio.sh
-  
+
+  install-prometheus:
+    description: Install prometheus using helm
+    run:
+      container: terraform
+      command: ./scripts/aws/install-prometheus.sh
+
+  install-grafana:
+    description: Install grafana using helm
+    run:
+      container: terraform
+      command: ./scripts/aws/install-grafana.sh
+
   login_aws:
     description: Login aws using OKTA. Will override your .aws/credentials file
     run:
