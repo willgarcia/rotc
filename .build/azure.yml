@@ -7,9 +7,9 @@ containers:
       - local: .
         container: /code
         options: cached
-      - local: ~/.kube/config
-        container: /root/.kube/config
-        options: cached
+      - local: ~/.kube
+        container: /root/.kube
+        # options: cached
       - local: ~/.azure
         container: /root/.azure
         options: cached
@@ -18,9 +18,6 @@ containers:
     working_directory: /code
     environment: 
       TF_VAR_prefix: $AZURE_PREFIX
-    ports:
-      - local: 8001
-        container: 8001
   azure_login:
     build_directory: .batect/azure_login
     volumes:
@@ -72,12 +69,6 @@ tasks:
       container: terraform
       command: bash
 
-  install-istio:
-    description: Install istio using istioctl
-    run:
-      container: terraform
-      command: ./scripts/azure/install-istio.sh
-  
   login_azure:
     description: Login Azure using OKTA. Will override your .azure/credentials file
     run:
@@ -91,12 +82,34 @@ tasks:
       entrypoint: '/bin/bash -c'
       environment:
         AZURE_PREFIX: $AZURE_PREFIX
-  browse_aks:
+
+  install-istio:
+    prerequisites:
+      - aks_credentials    
+    description: Install istio using istioctl
     run:
       container: terraform
-      command: "'az aks browse --disable-browser --listen-address 0.0.0.0 --resource-group $AZURE_PREFIX-k8s-resources --name $AZURE_PREFIX-k8s'"
-      entrypoint: '/bin/bash -c'
+      command: ./scripts/azure/install-istio.sh
       environment:
         AZURE_PREFIX: $AZURE_PREFIX
+
+  kubectl:
+    prerequisites:
+      - aks_credentials
+    run:
+      container: terraform
+      command: /bin/bash
+      environment:
+        AZURE_PREFIX: $AZURE_PREFIX
+
+  kiali:
+    prerequisites:
+      - aks_credentials
+    run:
+      container: terraform
+      command: "istioctl dashboard -p 8001 --address 0.0.0.0 kiali"
+      ports:
+        - local: 8001
+          container: 8001
 
     
