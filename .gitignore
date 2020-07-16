@@ -10,3 +10,4 @@ node_modules/
 *.tfstate
 .vscode/settings.json
 .envrc
+.idea

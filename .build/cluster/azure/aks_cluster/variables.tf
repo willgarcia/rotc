@@ -11,6 +11,7 @@ variable "prefix" {
 
 variable "resource_group_name" {
   description = "Name of the resource group."
+  default = "${var.prefix}-k8s-resources"
 }
 
 variable "aks_service_principal_app_id" {
