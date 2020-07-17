@@ -10,7 +10,7 @@ aws eks --region us-east-1 update-kubeconfig --name servicemesh_eks_cluster
 # 2. Install Istio in the istio-system namespace
 echo "Istio pre-installation verification"
 istioctl verify-install
-istioctl manifest apply --set profile=demo
+istioctl install --set profile=demo
 
 # 3. Verify the services are deployed
 kubectl -n istio-system get svc

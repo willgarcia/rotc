@@ -15,6 +15,7 @@ RUN wget -q -O /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TER
 
 RUN apk -v --update add py-pip && \
     pip install --upgrade awscli && \
+    pip install envsubst && \
     apk -v --purge del py-pip && \
     rm /var/cache/apk/*
 
