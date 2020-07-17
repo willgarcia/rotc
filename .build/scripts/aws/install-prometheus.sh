@@ -8,4 +8,3 @@ helm repo update
 
 # Install prometheus
 helm install --generate-name stable/prometheus
-helm install --generate-name stable/grafana
