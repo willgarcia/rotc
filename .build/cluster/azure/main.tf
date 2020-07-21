@@ -5,6 +5,10 @@ provider "azurerm" {
     features {}
 }
 
+provider "azuread" {
+    version = "=0.11.0"
+}
+
 terraform {
     backend "azurerm" {
         resource_group_name = "terraform-service-mesh"
@@ -25,5 +29,4 @@ module "aks_cluster" {
     # So - since we're using an app gateway, we need to provide these
     aks_service_principal_app_id = var.aks_service_principal_app_id
     aks_service_principal_client_secret = var.aks_service_principal_client_secret
-    aks_service_principal_object_id = var.aks_service_principal_object_id 
 }

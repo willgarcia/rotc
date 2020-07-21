@@ -22,10 +22,6 @@ variable "aks_service_principal_client_secret" {
   description = "Secret of the service principal. Used by AKS to manage Azure."
 }
 
-variable "aks_service_principal_object_id" {
-  description = "Object ID of the service principal."
-}
-
 variable "virtual_network_name" {
   description = "Virtual network name"
   default     = "aksVirtualNetwork"

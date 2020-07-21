@@ -6,5 +6,10 @@ resource "azurerm_user_assigned_identity" "testIdentity" {
   name = "identity1"
 
   tags = var.tags
+  lifecycle {
+    ignore_changes = [
+      "location"
+    ]
+  }    
 }
 

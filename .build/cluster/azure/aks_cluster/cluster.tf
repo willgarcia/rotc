@@ -24,7 +24,7 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     node_count      = var.aks_agent_count
     vm_size         = var.aks_agent_vm_size
     os_disk_size_gb = var.aks_agent_os_disk_size
-    vnet_subnet_id  = data.azurerm_subnet.kubesubnet.id
+    vnet_subnet_id  = azurerm_subnet.kubesubnet.id
   }
 
   service_principal {
@@ -41,4 +41,10 @@ resource "azurerm_kubernetes_cluster" "k8s" {
 
   depends_on = [azurerm_virtual_network.test, azurerm_application_gateway.network]
   tags       = var.tags
+
+  lifecycle {
+    ignore_changes = [
+      "location"
+    ]
+  }
 }

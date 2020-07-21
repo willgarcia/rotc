@@ -1,7 +1,8 @@
+
 resource "azurerm_role_assignment" "ra1" {
-  scope                = data.azurerm_subnet.kubesubnet.id
+  scope                = azurerm_subnet.kubesubnet.id
   role_definition_name = "Network Contributor"
-  principal_id         = var.aks_service_principal_object_id
+  principal_id         = data.azuread_service_principal.kube_service.object_id
 
   depends_on = [azurerm_virtual_network.test]
 }

@@ -17,8 +17,3 @@ variable "aks_service_principal_client_secret" {
   type = string
   description = "Service Principal password"
 }
-
-variable "aks_service_principal_object_id" {
-  type = string
-  description = "Service Principal object id"
-} 

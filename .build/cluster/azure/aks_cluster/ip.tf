@@ -8,4 +8,10 @@ resource "azurerm_public_ip" "test" {
   sku                          = "Standard"
 
   tags = var.tags
+
+  lifecycle {
+    ignore_changes = [
+      "location"
+    ]
+  }    
 }
