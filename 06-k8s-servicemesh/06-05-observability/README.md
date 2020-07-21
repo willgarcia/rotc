@@ -25,7 +25,7 @@ By default prometheus will get metrics from istio.
 3. Install Prometheus
 
 ```shell
-helm install prometheus stable/prometheus
+helm install prometheus stable/prometheus -n monitoring
 ```
 
 To access the server first get the name of the prometheus-server pod:
@@ -61,6 +61,18 @@ kubectl apply -f ./exercise/grafana-config-map.yaml
 helm install grafana stable/grafana -f exercise/grafana-config.yaml -n monitoring
 ```
 
+4.2 Grafana will create a secure password and add it as a secret in the cluster. To see the password use the command:
+```shell
+kubectl get secret --namespace monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+```
+
+4.3 To access the server
+```shell
+kubectl port-forward $(kubectl get pods -n monitoring -o name | grep grafana) 3001:3000 -n monitoring
+```
+
+4.4 You can import the dashboards or create a new one. To import use the id 7636 and select the Promethus datasource.
+
 ## Zipkin/Jaeger
 
 Zipkin and Jaeger are tools to trace all the requests done inside the cluster to respond an user request. For it to work, istio requires that your application propagate some headers in all requests and responses. See https://istio.io/latest/docs/tasks/observability/distributed-tracing/overview/ for more information.
@@ -80,7 +92,7 @@ helm install jaeger jaegertracing/jaeger \
 --set cassandra.resources.requests.cpu=0.4 \
 --set cassandra.resources.limits.memory=2048Mi \
 --set cassandra.resources.limits.cpu=0.4
--n monitoring
+# -n monitoring # is not working. We need to check or replace with the operator?
 ```
 
 After that, we can see the new services created. 
@@ -115,7 +127,7 @@ change to
       [...]
       tracing:
         zipkin:
-          address: jaeger-collector.monitoring:9411
+          address: jaeger-collector.default:9411
       [...]
 ```
 
@@ -143,6 +155,11 @@ Look into the container list for the `istio-proxy` container. Now it should have
 {"tracing":{"zipkin":{"address":"jaeger-collector.monitoring:9411"}},"proxyMetadata":{"DNS_AGENT":""}}
 ```
 
+To connect to the server:
+
+```
+
+```
 
 ## With Kiali
 
@@ -151,6 +168,10 @@ Kiali is a management console for an Istio-based service mesh. It provides dashb
 There are two components to Kiali - the application (back-end) and the console (front-end). The application runs in Kubernetes and interacts with the service mesh components to expose data to the console.
 
 ### Setup
+
+```
+  bash <(curl -L https://kiali.io/getLatestKialiOperator) --accessible-namespaces '**'
+```
 
 Before starting, set up Kiali to easily visualise traffic routes. Ignore this if you already set up Kiali in 06-01-featuretoggles.
 
