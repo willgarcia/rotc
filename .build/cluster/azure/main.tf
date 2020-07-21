@@ -18,11 +18,12 @@ module "aks_cluster" {
     source = "./aks_cluster"
     location = var.location
     prefix = var.prefix
+    aks_dns_prefix = "${var.prefix}-aks"
     resource_group_name = "${var.prefix}-k8s-resources"
 
-    aks_service_principal_app_id = "<Service Principal AppId>"
-
-    aks_service_principal_client_secret = "<Service Principal Client Secret>"
-
-    aks_service_principal_object_id = "<Service Principal Object Id>"    
+    # AKS only supports either SystemAssigned or ServicePrinicpal identity
+    # So - since we're using an app gateway, we need to provide these
+    aks_service_principal_app_id = var.aks_service_principal_app_id
+    aks_service_principal_client_secret = var.aks_service_principal_client_secret
+    aks_service_principal_object_id = var.aks_service_principal_object_id 
 }

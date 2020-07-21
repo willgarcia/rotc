@@ -1,5 +1,5 @@
 output "id" {
-  value = azurerm_kubernetes_cluster.servicemesh_aks_cluster.id
+  value = azurerm_kubernetes_cluster.k8s.id
 }
 
 output "client_key" {

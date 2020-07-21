@@ -18,6 +18,9 @@ containers:
     working_directory: /code
     environment: 
       TF_VAR_prefix: $AZURE_PREFIX
+      TF_VAR_aks_service_principal_app_id: $AKS_SERVICE_PRINCIPAL_APP_ID
+      TF_VAR_aks_service_principal_client_secret: $AKS_SERVICE_PRINCIPAL_PASSWORD
+      TF_VAR_aks_service_principal_object_id: $AKS_SERVICE_PRINCIPAL_OBJECT_ID
   azure_login:
     build_directory: .batect/azure_login
     volumes:
@@ -101,6 +104,15 @@ tasks:
       command: /bin/bash
       environment:
         AZURE_PREFIX: $AZURE_PREFIX
+
+  az-cli:
+    # prerequisites:
+    #   - aks_credentials
+    run:
+      container: terraform
+      command: az
+      environment:
+        AZURE_PREFIX: $AZURE_PREFIX        
 
   kiali:
     prerequisites:

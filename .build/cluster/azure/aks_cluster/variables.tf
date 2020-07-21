@@ -11,7 +11,7 @@ variable "prefix" {
 
 variable "resource_group_name" {
   description = "Name of the resource group."
-  default = "${var.prefix}-k8s-resources"
+  # default = "${var.prefix}-k8s-resources"
 }
 
 variable "aks_service_principal_app_id" {
@@ -72,7 +72,7 @@ variable "aks_name" {
 }
 variable "aks_dns_prefix" {
   description = "Optional DNS prefix to use with hosted Kubernetes API server FQDN."
-  default     = "{var.prefix}-aks"
+  # default     = "${var.prefix}-aks"
 }
 
 variable "aks_agent_os_disk_size" {
@@ -82,17 +82,17 @@ variable "aks_agent_os_disk_size" {
 
 variable "aks_agent_count" {
   description = "The number of agent nodes for the cluster."
-  default     = 3
+  default     = 1
 }
 
 variable "aks_agent_vm_size" {
   description = "The size of the Virtual Machine."
-  default     = "Standard_D3_v2"
+  default     = "Standard_DS2_v2"
 }
 
 variable "kubernetes_version" {
   description = "The version of Kubernetes."
-  default     = "1.11.5"
+  default     = "1.17.7"
 }
 
 variable "aks_service_cidr" {
