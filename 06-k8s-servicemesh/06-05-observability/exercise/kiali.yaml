@@ -1,0 +1,28 @@
+apiVersion: kiali.io/v1alpha1
+kind: Kiali
+metadata:
+  name: kiali
+spec:
+  auth:
+    strategy: anonymous
+  deployment:
+    accessible_namespaces:
+    - '**'
+    namespace: monitoring
+    view_only_mode: false
+  external_services:
+    grafana:
+      in_cluster_url: http://grafana.monitoring:80
+    istio:
+      istio_status_enabled: false
+    tracing:
+      in_cluster_url: http://jaeger-query.monitoring:80
+    prometheus:
+    # custom_metrics_url: http://prometheus-server.monitoring:80
+      url: http://prometheus-server.monitoring:80
+  istio_component_namespaces:
+    grafana: monitoring
+    jaeger: monitoring
+    prometheus: monitoring
+  istio_namespace: istio-system
+  version: default
