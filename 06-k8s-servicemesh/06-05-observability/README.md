@@ -4,14 +4,6 @@ New versions of Istio will not have the observabilities tools installed by defau
 
 ## Setup
 
-1. Install Helm in your machine
-
-```shell
-brew install helm
-helm add repo stable https://kubernetes-charts.storage.googleapis.com/
-helm repo update
-```
-
 2. Create a namespace for all the monitoring tools
 
 ```shell
@@ -21,69 +13,80 @@ kubectl apply -f ./exercise/namespace.yaml
 ## Prometheus
 
 By default prometheus will get metrics from istio.
-
-3. Install Prometheus
+3.1 Install the Prometheus Operator using the command:
 
 ```shell
-helm install prometheus stable/prometheus -n monitoring
+kubectl apply -f exercise/Prometheus/prometheus-operator-cr.yaml
+kubectl apply -f exercise/Prometheus/prometheus-operator-accounts.yaml
+kubectl apply -f exercise/Prometheus/prometheus-operator.yaml
+
+# The files are from https://raw.githubusercontent.com/coreos/prometheus-operator/master/bundle.yaml, we just changed the namespace where they are installed.
 ```
 
-To access the server first get the name of the prometheus-server pod:
+Check for the operator to start using:
 ```shell
-kubectl get pods -n monitoring
-NAME                                             READY   STATUS    RESTARTS   AGE
-prometheus-alertmanager-66c9754c64-7w57q         2/2     Running   0          10m
-prometheus-kube-state-metrics-6df5d44568-299k2   1/1     Running   0          10m
-prometheus-node-exporter-klrtn                   1/1     Running   0          10m
-prometheus-node-exporter-vzpd7                   1/1     Running   0          10m
-prometheus-pushgateway-84bf7f5876-gpz5w          1/1     Running   0          10m
-prometheus-server-6cd89ddd8f-nlrwc               2/2     Running   0          10m
+$ kubectl get pods -n monitoring
+
+NAME                                  READY   STATUS    RESTARTS   AGE
+prometheus-operator-7884495f5-smg5b   1/1     Running   0          35s
 ```
 
-Then do a port-forward to it
-```shell
-kubectl port-forward prometheus-server-6cd89ddd8f-nlrwc 3000:9090 -n monitoring
+3.2 Now we need to create the prometheus configuration for the scrape.
+```
+kubectl create secret generic additional-scrape-configs --from-file=exercise/prometheus-additional.yaml -n monitoring
+```
+
+3.3 Then install Prometheus using the custom resourcers created together with the operator.
+```
+kubectl apply -f exercise/Prometheus/prometheus.yaml
+```
+
+Now you can access the prometheus UI using the following command:
+```
+kubectl port-forward prometheus-prometheus-0 3000:9090 -n monitoring
 ```
 
 Just go to http://localhost:3000 to access it.
 
+
 ## Grafana
 
-4. Create a ConfigMap to connect Grafana to Prometheus
+4.1 Create a ConfigMap to connect Grafana to Prometheus
 
 ```shell
-kubectl apply -f ./exercise/grafana-config-map.yaml
+kubectl apply -f ./exercise/Grafana/grafana-config-map.yaml
 ```
 
 4.1 Install Grafana using the config file `grafana-config.yaml`
 
 ```shell
-helm install grafana stable/grafana -f exercise/grafana-config.yaml -n monitoring
+kubectl apply -f ./exercise/Grafana/grafana.yaml
 ```
 
-4.2 Grafana will create a secure password and add it as a secret in the cluster. To see the password use the command:
-```shell
-kubectl get secret --namespace monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
-```
-
-4.3 To access the server
+4.2 To access the server
 ```shell
 kubectl port-forward $(kubectl get pods -n monitoring -o name | grep grafana) 3001:3000 -n monitoring
 ```
 
-4.4 You can import the dashboards or create a new one. To import use the id 7636 and select the Promethus datasource.
+Just go to http://localhost:3001 to access it. The username will be admin and the password admin.
 
-## Zipkin/Jaeger
+4.4 You can import the dashboards or create a new one. Go to the plus button, then import use the id 7636 and select the Promethus datasource.
+
+## Jaeger
 
 Zipkin and Jaeger are tools to trace all the requests done inside the cluster to respond an user request. For it to work, istio requires that your application propagate some headers in all requests and responses. See https://istio.io/latest/docs/tasks/observability/distributed-tracing/overview/ for more information.
 
 To install Jaeger we can use Helm. We only need to configure the collector zipkin port. (For this exercise, we are reducing the number of resources, so all the other flags have this function).
 
+1. Install Helm in your machine
 
 ```shell
+brew install helm
 helm repo add jaegertracing https://jaegertracing.github.io/helm-charts
-help repo update
+helm repo update
+```
 
+```shell
 helm install jaeger jaegertracing/jaeger \
 --set collector.service.zipkin.port=9411 \
 --set cassandra.config.max_heap_size=1024M \
@@ -91,8 +94,8 @@ helm install jaeger jaegertracing/jaeger \
 --set cassandra.resources.requests.memory=2048Mi \
 --set cassandra.resources.requests.cpu=0.4 \
 --set cassandra.resources.limits.memory=2048Mi \
---set cassandra.resources.limits.cpu=0.4
-# -n monitoring # is not working. We need to check or replace with the operator?
+--set cassandra.resources.limits.cpu=0.4 \
+-n monitoring
 ```
 
 After that, we can see the new services created. 
@@ -108,15 +111,7 @@ jaeger-query       ClusterIP   172.20.254.118   <none>        80/TCP,16687/TCP  
 [...]
 ```
 
-Now we need to update the istio proxy to point to the jaeger collector. We can do it in two ways:
-
-```shell
-istioctl upgrade --set values.global.tracer.zipkin.address=jaeger-collector.default:9411
-
-# This command was not working in the alpha version of istio. But it worked in the stable version.
-```
-
-OR 
+Now we need to update the istio proxy to point to the jaeger collector:
 
 ```
 kubectl get configmap istio -n istio-system -o yaml > istio-config-map.yaml
@@ -127,7 +122,7 @@ change to
       [...]
       tracing:
         zipkin:
-          address: jaeger-collector.default:9411
+          address: jaeger-collector.monitoring:9411
       [...]
 ```
 
@@ -137,7 +132,7 @@ and apply it
 kubectl apply -f istio-config-map.yaml
 ```
 
-Wait some seconds and restart the pods on the namespace using the command:
+Wait some seconds (it may take around one minute for istio to update its config) and restart the pods on the namespace using the command:
 
 ```
 kubectl rollout restart deployment --namespace default
@@ -158,7 +153,7 @@ Look into the container list for the `istio-proxy` container. Now it should have
 To connect to the server:
 
 ```
-
+kubectl port-forward $POD_NAME 3002:16686 -n monitoring
 ```
 
 ## With Kiali
@@ -169,17 +164,20 @@ There are two components to Kiali - the application (back-end) and the console (
 
 ### Setup
 
+Install the operator:
 ```
-  bash <(curl -L https://kiali.io/getLatestKialiOperator) --accessible-namespaces '**'
+bash <(curl -L https://kiali.io/getLatestKialiOperator) --operator-install-kiali false --operator-namespace monitoring
 ```
 
-Before starting, set up Kiali to easily visualise traffic routes. Ignore this if you already set up Kiali in 06-01-featuretoggles.
+Install kiali:
+```
+kubectl apply -f exercise/kiali.yaml
+```
 
-1. Install `istioctl` (on Mac, this can be done with Homebrew).
-2. Run `istioctl dashboard kiali`.
-3. Login with the default username *admin* and default password *admin*.
-
-The Kiali dashboard shows an overview of your mesh with the relationships between the services in the Bookinfo sample application.
+To connect to the server:
+```
+kubectl port-forward $(kubectl get pods -n monitoring -o name | grep kiali) 3000:20001 -n monitoring
+```
 
 ### Understanding the Graph
 
