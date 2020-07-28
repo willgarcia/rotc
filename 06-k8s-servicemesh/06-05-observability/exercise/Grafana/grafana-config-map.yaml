@@ -13,4 +13,4 @@ data:
       type: prometheus
       access: proxy
       orgId: 1
-      url: http://prometheus-server.monitoring.svc.cluster.local
+      url: http://prometheus-operated.monitoring.svc.cluster.local:9090

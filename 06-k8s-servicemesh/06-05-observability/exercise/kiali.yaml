@@ -2,6 +2,7 @@ apiVersion: kiali.io/v1alpha1
 kind: Kiali
 metadata:
   name: kiali
+  namespace: monitoring
 spec:
   auth:
     strategy: anonymous
@@ -14,15 +15,16 @@ spec:
     grafana:
       in_cluster_url: http://grafana.monitoring:80
     istio:
+      istio_identity_domain: "svc.cluster.local"
+      istio_sidecar_annotation: "sidecar.istio.io/status"
       istio_status_enabled: false
     tracing:
       in_cluster_url: http://jaeger-query.monitoring:80
     prometheus:
-    # custom_metrics_url: http://prometheus-server.monitoring:80
-      url: http://prometheus-server.monitoring:80
+      url: http://prometheus-operated.default:9090
   istio_component_namespaces:
     grafana: monitoring
     jaeger: monitoring
-    prometheus: monitoring
+    prometheus: default
   istio_namespace: istio-system
   version: default
