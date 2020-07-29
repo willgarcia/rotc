@@ -33,9 +33,35 @@ containers:
     environment: {}
       # AWS_PROFILE: dev
       # AWS_SDK_LOAD_CONFIG: 1
+  pulumi:
+    build_directory: .batect/azure-pulumi
+    volumes:
+      - local: .
+        container: /code
+        options: cached
+      - local: ~/.kube
+        container: /root/.kube
+        # options: cached
+      - local: ~/.azure
+        container: /root/.azure
+        options: cached
+      - local: /var/run/docker.sock
+        container: /var/run/docker.sock
+      - local: ~/.pulumi
+        container: /root/.pulumi
+        # options: cached
+    working_directory: /code
+    environment: 
+      AZURE_PREFIX: $AZURE_PREFIX
 
 
 tasks:
+  setup-azure-pulumi:
+    description: Setup Azure Backend For Pulumi.
+    run:
+      container: pulumi
+      command: ./scripts/azure/setup-azure-pulumi.sh
+
   setup-terraform:
     description: Initialise Terraform.
     run:
@@ -67,6 +93,12 @@ tasks:
     description: Run a shell in the Terraform environment.
     run:
       container: terraform
+      command: bash
+      
+  pul-shell:
+    description: Run a shell in the Terraform environment.
+    run:
+      container: pulumi
       command: bash
 
   login_azure:
