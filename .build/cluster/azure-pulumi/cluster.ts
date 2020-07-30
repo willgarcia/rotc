@@ -1,21 +1,11 @@
 import * as azure from "@pulumi/azure";
-// import * as azuread from "@pulumi/azuread";
 import * as k8s from "@pulumi/kubernetes";
 import * as pulumi from "@pulumi/pulumi";
 import * as config from "./config";
 
-// Create the AD service principal for the K8s cluster.
-// const adApp = new azuread.Application("aks");
-// const adSp = new azuread.ServicePrincipal("aksSp", { applicationId: adApp.applicationId });
-// const adSpPassword = new azuread.ServicePrincipalPassword("aksSpPassword", {
-//     servicePrincipalId: adSp.id,
-//     value: config.password,
-//     endDate: "2099-01-01T00:00:00Z",
-// });
-
-// Now allocate an AKS cluster.
+// Allocate an AKS cluster.
 export const k8sCluster = new azure.containerservice.KubernetesCluster("aksCluster", {
-    name: "ivandonatok8s",
+    name: "k8sCluster",
     resourceGroupName: config.resourceGroup.name,
     location: config.location,
     defaultNodePool: {
@@ -27,16 +17,6 @@ export const k8sCluster = new azure.containerservice.KubernetesCluster("aksClust
         type: "SystemAssigned"
     },
     dnsPrefix: `${pulumi.getStack()}-kube`,
-    // linuxProfile: {
-    //     adminUsername: "aksuser",
-    //     sshKey: {
-    //         keyData: config.sshPublicKey,
-    //     },
-    // },
-    // servicePrincipal: {
-    //     clientId: adApp.applicationId,
-    //     clientSecret: adSpPassword.value,
-    // },
 });
 
 // Expose a K8s provider instance using our custom cluster instance.

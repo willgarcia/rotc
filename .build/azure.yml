@@ -47,9 +47,6 @@ containers:
         options: cached
       - local: /var/run/docker.sock
         container: /var/run/docker.sock
-      - local: ~/.pulumi
-        container: /root/.pulumi
-        # options: cached
     working_directory: /code
     environment: 
       AZURE_PREFIX: $AZURE_PREFIX
