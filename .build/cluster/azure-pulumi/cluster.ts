@@ -5,7 +5,7 @@ import * as config from "./config";
 
 // Allocate an AKS cluster.
 export const k8sCluster = new azure.containerservice.KubernetesCluster("aksCluster", {
-    name: "k8sCluster",
+    name: `${process.env.AZURE_PREFIX}-k8s`,
     resourceGroupName: config.resourceGroup.name,
     location: config.location,
     defaultNodePool: {

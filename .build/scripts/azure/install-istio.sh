@@ -4,8 +4,8 @@
 istioctl version --remote=false
 ISTIO_VERSION="$(istioctl version --remote=false)"
 
-# 1. Create a kubeconfig for Amazon EKS and verify configuration
-# aws eks --region us-east-1 update-kubeconfig --name servicemesh_eks_cluster
+# 1. Create a kubeconfig for Azure and verify configuration
+az aks get-credentials --resource-group $AZURE_PREFIX-k8s-resources --name $AZURE_PREFIX-k8s
 
 # 2. Install Istio in the istio-system namespace
 echo "Istio pre-installation verification"
@@ -39,7 +39,7 @@ istioctl analyze
 
 # 10. Set the ingress ports
 echo "Setting ingress ports"
-export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')
 export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].port}')
 export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT
@@ -49,5 +49,5 @@ echo "Applying default destination rules"
 kubectl apply -f "../istio-$ISTIO_VERSION/samples/bookinfo/networking/destination-rule-all.yaml"
 
 # 12. Get browser address
-echo "Copy this address into your browser to view the Bookinfo product page:"
+echo "Copy this address into your browser to view the Bookinfo product page (this may take a few minutes to be accessible):"
 echo http://$GATEWAY_URL/productpage

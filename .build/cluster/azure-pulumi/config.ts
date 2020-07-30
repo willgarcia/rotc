@@ -6,4 +6,4 @@ const config = new pulumi.Config();
 export const location = config.get("location") || azure.Locations.EastUS;
 export const nodeCount = config.getNumber("nodeCount") || 2;
 export const nodeSize = config.get("nodeSize") || "Standard_D2_v2";
-export const resourceGroup = new azure.core.ResourceGroup("aks", { name: "ivandonatok8s-resourceg", location });
+export const resourceGroup = new azure.core.ResourceGroup("aks", { name: `${process.env.AZURE_PREFIX}-k8s-resources`, location });

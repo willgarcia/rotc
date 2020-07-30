@@ -58,6 +58,12 @@ tasks:
     run:
       container: pulumi
       command: ./scripts/azure/setup-azure-pulumi.sh
+  
+  destroy-azure-pulumi:
+    description: Destroy Azure Backend For Pulumi.
+    run:
+      container: pulumi
+      command: ./scripts/azure/destroy-azure-pulumi.sh
 
   setup-terraform:
     description: Initialise Terraform.
@@ -67,7 +73,6 @@ tasks:
       environment:
         TF_CLI_ARGS: -backend-config="storage_account_name=$AZURE_TF_STORAGE_ACCOUNT"
         
-  
   plan-terraform:
     description: Create a Terraform execution plan to ensure the set of changes matches your expectations.
     run:
@@ -114,10 +119,20 @@ tasks:
 
   install-istio:
     prerequisites:
-      - aks_credentials    
+      - aks_credentials
     description: Install istio using istioctl
     run:
       container: terraform
+      command: ./scripts/azure/install-istio.sh
+      environment:
+        AZURE_PREFIX: $AZURE_PREFIX
+
+  pulumi-install-istio:
+    prerequisites:
+      - aks_credentials
+    description: Install istio using istioctl
+    run:
+      container: pulumi
       command: ./scripts/azure/install-istio.sh
       environment:
         AZURE_PREFIX: $AZURE_PREFIX
