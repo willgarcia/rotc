@@ -24,14 +24,14 @@ export AZURE_STORAGE_ACCOUNT=$STORAGE_ACCOUNT_NAME
 sleep 5
 
 cd cluster
-mkdir pulumi-test && cd pulumi-test
+mkdir pulumi-k8s && cd pulumi-k8s
 pulumi login --cloud-url azblob://${STORAGE_CONTAINER_NAME}
 
 # Create a new typescript pulumi project
 pulumi new azure-typescript
 
 # Copy files needed to spin up an AKS cluster
-cp -r /code/cluster/azure-pulumi/. /code/cluster/pulumi-test
+cp -r /code/cluster/azure-pulumi/. /code/cluster/pulumi-k8s
 
 # Install dependencies
 npm i

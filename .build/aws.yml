@@ -49,6 +49,8 @@ containers:
       - local: /var/run/docker.sock
         container: /var/run/docker.sock
     working_directory: /code
+    environment: 
+      AZURE_PREFIX: $AZURE_PREFIX
 
 
 tasks:
