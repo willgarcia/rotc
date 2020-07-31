@@ -34,6 +34,21 @@ containers:
     environment:
       AWS_PROFILE: dev
       AWS_SDK_LOAD_CONFIG: 1
+  pulumi:
+    build_directory: .batect/aws-pulumi
+    volumes:
+      - local: .
+        container: /code
+        options: cached
+      - local: ~/.kube
+        container: /root/.kube
+        # options: cached
+      - local: ~/.aws
+        container: /root/.aws
+        options: cached
+      - local: /var/run/docker.sock
+        container: /var/run/docker.sock
+    working_directory: /code
 
 
 tasks:
@@ -42,6 +57,12 @@ tasks:
     run:
       container: terraform
       command: terraform init -input=false cluster/aws
+
+  setup-pulumi:
+    description: Setup AWS Backend For Pulumi.
+    run:
+      container: pulumi
+      command: ./scripts/aws/setup-aws-pulumi.sh
 
   plan-terraform:
     description: Create a Terraform execution plan to ensure the set of changes matches your expectations.
