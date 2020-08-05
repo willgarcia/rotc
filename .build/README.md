@@ -72,7 +72,8 @@ This file contains instructions for instructors to create all of the resources u
 
 * Run `./batect -f azure.yml setup-azure-pulumi` to setup the self managed backend to store the k8s state as well spin up the K8s cluster
   
-  * n.b. * You'll have to press enter through all the prompts except for the location. When it asks you for a location type in `EastUS`
+  * n.b. You'll have to press enter through all the prompts except for the location. When it asks you for a location type in `EastUS`
+  
        * Navigate to yes to perform update and press enter
 
 ## Install Istio
