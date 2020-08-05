@@ -90,6 +90,12 @@ tasks:
       container: terraform
       command: bash
 
+  pulumi-shell:
+    description: Run a shell in the Pulumi environment.
+    run:
+      container: pulumi
+      command: bash
+
   install-istio:
     description: Install istio using istioctl
     run:

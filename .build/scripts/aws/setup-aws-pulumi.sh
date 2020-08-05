@@ -1,20 +1,28 @@
 #!/usr/bin/env bash
 
-aws s3 rb s3://pulumi-bucket-unique --force
+# This code works. At the time of writing this we had issues with the limit on VPCs beign able to be created in the Beach AWS account.
+# I'll leave the code in here as a POC
 
-aws s3api create-bucket --bucket pulumi-bucket-unique --region us-east-1
+# S3_NAME="pulumi-bucket-${AZURE_PREFIX}"
 
-pulumi login s3://pulumi-bucket-unique
+# Create S3 bucket for self managed backend state
+# aws s3api create-bucket --bucket $S3_NAME --region us-east-1
 
-cd cluster
+# Create new directory to hold resource files
+# cd cluster
+# mkdir pulumi-k8s-aws && cd pulumi-k8s-aws
 
-rm -rf pulumi-k8s
-mkdir pulumi-k8s && cd pulumi-k8s
+# Login to Pulumi S3
+# pulumi login s3://$S3_NAME
 
-pulumi new aws-typescript
+# Create new Pulumi project
+# pulumi new aws-typescript
 
-cp -r /code/cluster/aws-pulumi/. /code/cluster/pulumi-k8s
+# Copy over k8s files
+# cp -r /code/cluster/aws-pulumi/. /code/cluster/pulumi-k8s-aws
 
-npm i
+# install dependencies
+# npm i
 
-pulumi up
+# provision resources
+# pulumi up
