@@ -20,9 +20,9 @@ This file contains instructions for instructors to create all of the resources u
 ## Prequisites
 
 * Create a resource group called 'terraform-service-mesh'
-* Within that resource group, create a storage account in Azure to hold the TF state file e.g. '<yourname>stgterra1'
+* Within that resource group, create a storage account in Azure to hold the TF state file e.g. `<yourname>stgterra1`
 * Create a container inside the storage account called 'tfstate'
-* Set up an environment variable AZURE_TF_STORAGE_ACCOUNT with a unique name like '<yourname>stgterra1'
+* Set up an environment variable AZURE_TF_STORAGE_ACCOUNT with a unique name like `<yourname>stgterra1`
 * Set up an environment variable AZURE_PREFIX with your name
   * (Optional) Install direnv, and setup a .envrc file to hold the env var.
       * `brew install direnv`
@@ -47,7 +47,7 @@ This file contains instructions for instructors to create all of the resources u
   * If no Ip address appears at the end of the istio install, type this commmand in your terminal:
     `kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}`
     
-  * Then make your way to '<yourIPAddres>/productpage' 
+  * Then make your way to `<yourIPAddres>/productpage` 
 
 * Run `./batect -f azure.yml shell` to open a shell inside the cluster
 
@@ -56,12 +56,11 @@ This file contains instructions for instructors to create all of the resources u
 ## Browse k8s 
 * Run `./batect -f azure.yml browse-aks`
 
----
-# Azure stack with Pulumi
 
+# Azure stack with Pulumi
 ## Prequisites
 
-* Set up an environment variable AZURE_TF_STORAGE_ACCOUNT with a unique name like '<yourname>stgterra1'
+* Set up an environment variable AZURE_TF_STORAGE_ACCOUNT with a unique name like `<yourname>stgterra1`
 * Set up an environment variable AZURE_PREFIX with your name
   * (Optional) Install direnv, and setup a .envrc file to hold the env var.
       * `brew install direnv`
@@ -86,26 +85,11 @@ This file contains instructions for instructors to create all of the resources u
   * If no Ip address is appears at the end of the install, type this commmand in your terminal:
     `kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}`
     
-  * Then make your way to '<yourIPAddres>/productpage' 
+  * Then make your way to `<yourIPAddres>/productpage` 
 
 * Run `./batect -f azure.yml shell` to open a shell inside the cluster
 
-* Run `./batect -f azure.yml destroy-azure-pulumi` to destroy the environment
-
-press enter throught the prompts
-
-Azure location: EastUS
-
-navigate to yes to perform update press enter
-
-click the link provided
-
-you might have to wait a bit for the app to load
-
-
-
-
-
+* Run `./batect -f azure.yml destroy-azure-pulumi` to destroy the environment and all resources
 
 
 # GCP
