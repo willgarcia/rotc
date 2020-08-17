@@ -26,7 +26,7 @@ This file contains instructions for instructors to create all of the resources u
 * Set up an environment variable AZURE_PREFIX with your name
   * (Optional) Install direnv, and setup a .envrc file to hold the env var.
       * `brew install direnv`
-      * `EXPORT AZURE_TF_STORAGE_ACCOUNT=<yourname>stgterra`
+      * `EXPORT AZURE_TF_STORAGE_ACCOUNT=<yourname>stgterra1`
       * `EXPORT AZURE_PREFIX=<yourname>`
 
 ## Steps

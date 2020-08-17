@@ -53,6 +53,12 @@ containers:
 
 
 tasks:
+  setup-azure-backend:
+    description: Setup Azure Backend for Terraform
+    run:
+      container: terraform
+      command: ./scripts/azure/setup-azure-backend.sh
+
   setup-azure-pulumi:
     description: Setup Azure Backend For Pulumi.
     run:
