@@ -9,7 +9,7 @@ Welcome to the Service Mesh Workshop as developed by a large team of dedicated T
 
 
 As they say, the best thing to do is to just get on with it.
-So, let's get started
+So, let's get started!
 
 
 ## Setup
@@ -32,7 +32,7 @@ We are going to need some enviroment variables setup for our Azure resources. Re
 
 ### Creating the Cluster
 
-We will be using Batect as to run our builds. Batect is a really useful tool created by Thoughtworker Charles Korn. We are using Batect to build our containers that will run these processes. You can find more at https://github.com/batect/batect
+We will be using Batect to run our builds. Batect is a really useful tool created by Thoughtworker Charles Korn. We are using Batect to build our containers that will run these processes. You can find more at https://github.com/batect/batect
 
 The first time you use Batect it will download the binaries in order to run it. Similarly, the first time we run our containers they will need to be built and therefore take a tiny bit of time
 
@@ -45,7 +45,7 @@ The first time you use Batect it will download the binaries in order to run it. 
 * Run `./batect -f azure.yml setup-terraform` to get your terraform environment ready.  This will connect to the storage account and container.  See
 `cluster/azure/terraform-service-mesh.arm` for a template to create in your personal azure subscription.
 
-* Run `./batect -f azure.yml plan-terraform` to check to see the resources tha will be provisioned
+* Run `./batect -f azure.yml plan-terraform` to check to see the resources that will be provisioned
 
 * Run `./batect -f azure.yml apply-terraform` to setup the cluster
 
@@ -53,7 +53,7 @@ The first time you use Batect it will download the binaries in order to run it. 
 ### Installing Istio
 * Run `./batect -f azure.yml install-istio` to install Istio and deploy the Bookinfo Application
 
-  * n.b. If you get asked to override your kubeconfig file, press `y` and enter 
+  * n.b. If you are asked to override your kubeconfig file, press `y` and enter 
   
   * If no Ip address appears at the end of the istio install, type this commmand in your terminal:
     `kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}`
@@ -429,7 +429,6 @@ You can migrate all traffic to reviews:v3:
 ```
 kubectl apply -f 06-03-faultinjection/exercise/traffic-shifting-v3.yaml
 ```
-and then try to change the delay rule to any amount less than 2.5 seconds to confirm the end-to-end flow continues without any errors.
 
 # Exercise 3.2
 ## Injecting a HTTP abort fault
@@ -472,7 +471,7 @@ kubectl delete -f 06-03-faultinjection/exercise/virtual-service-all-v1.yaml
 
 ## Canary Deployments with Flagger
 
-Canary deployment is a technique to avoid downtime while deploying a new version of your application. Instead of replacing all your pods with the new version, you deploy new pods with the new version and redirect a small part of the traffic to them to collect metrics and verify that the new version is stable. After verifying that the new version is working as expected, you increase the traffic until you have a great degree of confidence that the new version is working. Only after it that you start removing the pods of the old version. If you encounter a bug or problem, you just redirect the traffic to the old version.
+Canary deployment is a technique to avoid downtime while deploying a new version of your application. Instead of replacing all your pods with the new version, you deploy new pods with the new version and redirect a small part of the traffic to them to collect metrics and verify that the new version is stable. After verifying that the new version is working as expected, you increase the traffic until you have a great degree of confidence that the new version is working. Only after that would you start removing the pods of the old version. If you encounter a bug or problem, you just redirect the traffic to the old version.
 
 Flagger is a tool to automate all this process. 
 
@@ -498,7 +497,7 @@ kubectl apply -k github.com/weaveworks/flagger//kustomize/istio
 
 ## Flagger Canary
 
-Flagger adds the type Canary to kubernetes. This type detects changes in a deployment and deploy these changes using the Canary technique. It automates the creation of the new deployments, management of the traffic, analysis of the metrics, roolout and fallback.
+Flagger adds the type Canary to kubernetes. This type detects changes in a deployment and deploy these changes using the Canary technique. It automates the creation of the new deployments, management of the traffic, analysis of the metrics, rollout and fallback.
 
 ```
 apiVersion: flagger.app/v1beta1
