@@ -12,7 +12,7 @@ As they say, the best thing to do is to just get on with it.
 So, let's get started!
 
 
-## Setup
+## Pre-Workshop Setup
 
 Make sure that you have your free account setup in Azure. You can create one here https://azure.microsoft.com/en-au/
 
@@ -20,15 +20,19 @@ Clone the repo
 
 `git clone git@github.com:willgarcia/rotc.git && cd rotc`
 
-Change into the build directory
-
-`cd .build`
-
 We are going to need some enviroment variables setup for our Azure resources. Replace the `<yourname>` with your actual name when you export the variables.
 
 `export AZURE_PREFIX=<yourname>`
 
 `export AZURE_TF_STORAGE_ACCOUNT=<yourname>stgterra1`
+
+Make sure the volume bar on your laptop is halfway
+
+* Run `./.build/scripts/workshop/workshop-setup.sh ` and let Stevie guide you through your installation!
+
+ - if you end up in a shell with `bash-5.0#` in your terminal you've made it! Press `ctrl d` to get out of the container.
+
+ - Run `killall afplay` if your installation is prompt and you've had enough of Stevie. Otherwise the process will end once he's finished.
 
 ### Creating the Cluster
 
@@ -36,14 +40,17 @@ We will be using Batect to run our builds. Batect is a really useful tool create
 
 The first time you use Batect it will download the binaries in order to run it. Similarly, the first time we run our containers they will need to be built and therefore take a tiny bit of time
 
+* Change into the build directory
+
+`cd .build`
+
 * Run `./batect -f azure.yml login_azure` to set up the Azure credentials.
 
 * Run `./batect -f azure.yml setup-azure-backend` to create a resource group, storage account and storage container to house our Terraform state file.
 
 * Check your Azure portal to see if your resources have been created.
 
-* Run `./batect -f azure.yml setup-terraform` to get your terraform environment ready.  This will connect to the storage account and container.  See
-`cluster/azure/terraform-service-mesh.arm` for a template to create in your personal azure subscription.
+* Run `./batect -f azure.yml setup-terraform` to get your terraform environment ready.  This will connect to the storage account and container.
 
 * Run `./batect -f azure.yml plan-terraform` to check to see the resources that will be provisioned
 

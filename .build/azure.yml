@@ -53,6 +53,13 @@ containers:
 
 
 tasks:
+  workshop-setup:
+    description: task to pull all necessary images for workshop setup
+    dependencies:
+      - azure_login
+    run:
+      container: terraform
+
   setup-azure-backend:
     description: Setup Azure Backend for Terraform
     run:
@@ -168,6 +175,3 @@ tasks:
     run:
       container: terraform
       command: "istioctl"
-
-
-    
