@@ -1,4 +1,4 @@
-# 01-02 Docker
+# 01-01-02 Docker
 
 ## Tagging and Publishing a Docker Image
 

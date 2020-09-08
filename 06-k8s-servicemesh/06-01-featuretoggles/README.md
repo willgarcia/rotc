@@ -1,4 +1,4 @@
-# Feature toggling
+# 06-01 Feature toggling
 
 The examples are based on the Istio setup [guide](https://istio.io/docs/setup/getting-started/).
 

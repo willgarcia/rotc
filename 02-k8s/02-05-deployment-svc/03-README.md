@@ -1,4 +1,4 @@
-# 02-05 Kubernetes Deployment and Service
+# 02-05-03 Kubernetes Deployment and Service
 
 ## External access to the pod - how to create a basic service
 

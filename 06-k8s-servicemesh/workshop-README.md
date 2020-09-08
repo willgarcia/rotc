@@ -1,4 +1,4 @@
-# Service Mesh Workshop
+# 06-00-02 Service Mesh Workshop
 
 Welcome to the Service Mesh Workshop as developed by a large team of dedicated Thoughtworkers. This workshop will run through a series of exercises intended to explore different concepts through the prism of a Service Mesh. Below is a list of the topics covered in the exercises:
 

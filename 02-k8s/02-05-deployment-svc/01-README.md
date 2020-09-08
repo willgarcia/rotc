@@ -1,4 +1,4 @@
-# 02-05 Kubernetes Deployment and Service
+# 02-05-01 Kubernetes Deployment and Service
 
 ## Pre-requisites
 

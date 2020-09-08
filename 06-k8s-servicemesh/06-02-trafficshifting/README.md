@@ -1,4 +1,4 @@
-# Traffic Shifting
+# 06-02 Traffic Shifting
 The examples are based on the Istio setup [guide](https://istio.io/docs/setup/getting-started/).
 
 After following the setup guide, to view the Bookinfo app webpage, run the following command and paste the output into your browser.

@@ -1,4 +1,4 @@
-# Fault Injection
+# 06-03 Fault Injection
 
 Fault injection is a testing method where failures are intentionally introduced into a system to test its resiliency and measure recovery times in various scenarios.
 

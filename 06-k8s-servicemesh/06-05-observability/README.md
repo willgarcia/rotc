@@ -1,4 +1,4 @@
-# Observability
+# 06-05 Observability
 
 New versions of Istio will not have the observabilities tools installed by default. So we will need to install all and configure them. To help with this process, we will use Helm.
 

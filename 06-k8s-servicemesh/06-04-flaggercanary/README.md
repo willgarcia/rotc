@@ -1,4 +1,4 @@
-# Canary Deployments with Flagger
+# 06-04 Canary Deployments with Flagger
 
 Canary deployment is a technique to avoid downtime while deploying a new version of your application. Instead of replacing all your pods with the new version, you deploy new pods with the new version and redirect a small part of the traffic to them to collect metrics and verify that the new version is stable. After verifying that the new version is working as expected, you increase the traffic until you have a great degree of confidence that the new version is working. Only after it that you start removing the pods of the old version. If you encounter a bug or problem, you just redirect the traffic to the old version.
 
