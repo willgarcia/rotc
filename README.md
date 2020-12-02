@@ -6,7 +6,7 @@
 * `.build/`: instruction / build scripts - trainers only
 * `demo/`: demos - trainers only
 
-[Build tasks to provision Kubernetes in GCP/Azure](./build/README.md)
+[Build tasks to provision Kubernetes in AWS/GCP/Azure](./.build/README.md)
 
 ## References
 
