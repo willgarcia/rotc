@@ -59,8 +59,8 @@ Docker HUB
 - Use the rotcaus Docker account to login:
 
   ```bash
-  # Ask for the password
-  echo "[account-password]" | docker login --username rotcaus --password-stdin
+  # You'll be prompted for a password
+  docker login --username rotcaus
   ```
 
 ### Publish the Docker image
