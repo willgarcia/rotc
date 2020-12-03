@@ -18,7 +18,7 @@ containers:
     working_directory: /code
     environment:
       CLUSTER_NAME: k8s-cluster
-      CLUSTER_VERSION: 1.15.11-gke.5
+      CLUSTER_VERSION: 1.15.12-gke.6001
       CLUSTER_LOCATION: australia-southeast1-a
       CLOUDSDK_COMPUTE_REGION: australia-southeast1
       # CLOUDSDK_CORE_PROJECT: rotcaus
