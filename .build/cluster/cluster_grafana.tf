@@ -7,8 +7,8 @@ resource "kubernetes_namespace" "grafana-ns" {
 
 resource "helm_release" "grafana-chart" {
   name  = "grafana"
-  chart = "stable/grafana"
-  namespace = "grafana"
+  chart = "grafana"
+  repository = "https://grafana.github.io/helm-charts"
 
-  depends_on = ["kubernetes_namespace.grafana-ns"]
+  namespace = kubernetes_namespace.grafana-ns.metadata.0.name
 }

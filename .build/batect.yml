@@ -24,6 +24,7 @@ containers:
       # CLOUDSDK_CORE_PROJECT: rotcaus
       CLOUDSDK_CORE_PROJECT: servicemeshlab
       GOOGLE_BILLING_ACCOUNT_ID: 01A73F-4983F0-0FC3DE
+      HELM_DEBUG: 1
 
 tasks:
   setup-gcp:
