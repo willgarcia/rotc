@@ -63,7 +63,7 @@ volumes:
 Launch the stack in the background:
 
 ```console
-docker-compose up -d --build
+docker-compose up --detach --build
 ```
 
 Verify that the app is working correctly: <http://localhost:8000>
