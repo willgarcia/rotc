@@ -1,4 +1,4 @@
-# 02-01 Kubectl
+# 02-01 `kubectl`
 
 In this module, we introduce `kubectl` to access a remote Kubernetes cluster.
 
@@ -9,7 +9,7 @@ You will learn about:
 
 ## Setup
 
-Depending on where the Kubernetes, follow the following instructions to get access to the cluster.
+Depending on where the Kubernetes cluster for the workshop has been setup, follow the instructions in one of the sections below:
 
 ### GCP
 
@@ -49,24 +49,13 @@ Depending on where the Kubernetes, follow the following instructions to get acce
 
 No code provided. We will only use terminal command lines to access a remote cluster!
 
-Run the following command to verify that all the components of your cluster are healthy:
-
-```console
-kubectl get componentstatus
-```
-
-The output should be similar to this:
-
-```output
-NAME                 STATUS    MESSAGE             ERROR
-controller-manager   Healthy   ok
-scheduler            Healthy   ok
-etcd-0               Healthy   {"health":"true"}
-```
-
 ### Access to the cluster API
 
-Kubernetes runs inside a Linux VM. This VM is not directly accessible but you can find its IP address with:
+When running Kubernetes locally, it typically runs inside a Linux VM. This VM is not directly accessible.
+
+When running Kubernetes on AWS/Azure/GCP etc, the Kubernetes API is hosted by the provider.
+
+You can see the address for the Kubernetes API server using:
 
 ```console
 kubectl cluster-info
@@ -103,29 +92,28 @@ The output should be similar to this:
 
 ```output
 NAME                                              STATUS   ROLES    AGE     VERSION
-gke-k8s-cluster-default-node-pool-6681a730-d257   Ready    <none>   3d21h   v1.15.11-gke.5
-gke-k8s-cluster-default-node-pool-e61f3b84-f9h6   Ready    <none>   3d21h   v1.15.11-gke.5
-gke-k8s-cluster-default-node-pool-ffbb1244-ghkc   Ready    <none>   3d21h   v1.15.11-gke.5
+gke-k8s-cluster-default-node-pool-6681a730-d257   Ready    <none>   3d21h   v1.15.12-gke.6001
+gke-k8s-cluster-default-node-pool-e61f3b84-f9h6   Ready    <none>   3d21h   v1.15.12-gke.6001
+gke-k8s-cluster-default-node-pool-ffbb1244-ghkc   Ready    <none>   3d21h   v1.15.12-gke.6001
 ```
 
-In a production scenario, the master typically does not execute pods.
-
-Any Kubernetes Object can be inspected via the kubectl command line.
-Below is an example.
+Any Kubernetes object can be inspected via the `kubectl` command line:
 
 ```console
-kubectl get nodes -o yaml
+kubectl get nodes --output yaml
 ```
+
+`--output yaml` specifies that `kubectl` should print the full object spec, rather than a list as seen above.
 
 There may be a lot of output but have a look at the top of the definition there is a `spec:` section.
 
 Wait, what is the `spec`?
 
-The spec describe how we want this object to be. It is the definition that you supply when defining Kubernetes Objects. This is what is likely stored in version control. 
+The spec describe how we want this object to be. It is the definition that you supply when defining Kubernetes objects. This is what is likely stored in version control.
 
 If the spec is updated on an object, Kubernetes will reconcile the current state with the spec and take a series of actions (through the controller) to converge to this declared state.
 
-If you look at `images` YAML entry in this output, you will also find all the Docker images that are known by the node. These have been downloaded, stored on the master node and can be used now to create/recreate containers and pods in the node.
+If you look at `images` YAML entry in this output, you will also find all the Docker images that are known by the node. These have been downloaded, stored on the node and can be used now to create/recreate containers and pods in the node (note that in a multi-node environment, different nodes may have difference images cached).
 
 ### Listing the pods of the cluster
 
@@ -161,18 +149,21 @@ kube-system   prometheus-to-sd-xmzjm                                       2/2  
 kube-system   stackdriver-metadata-agent-cluster-level-c678bc98d-j5sbz     2/2     Running   0          3d21h
 ```
 
-- `coredns`: the default DNS that is used for service discovery in Kubernetes clusters.
+Some components that are typically found in clusters are:
+
+- `coredns`/`kube-dns`: the default DNS that is used for service discovery in Kubernetes clusters.
 - `kube-apiserver`: the Kubernetes API server responsible for the communication between all the components in the cluster
 - `etcd`: the Kubernetes "database" storing all object definitions
 - `kube-controller-manager`: handles node failures, replicating components, maintaining the correct amount of pods etc.
 - `kube-scheduler`: decides which pod to assign to which node based on resource affinity rules / selectors / hardware requirements.
 
+Exactly which of these components are deployed depend on how the cluster is configured (for example, a managed cluster in GCP won't show `etcd` pods).
+
 Finally, there is one component that is typically only present on worker nodes:
 
 - `kube-proxy`: load balances traffic between applications within a node
 
-
-These above pods are what is needed by Kubernetes to operate.
+These pods are what is needed by Kubernetes to operate, as well as additional cluster wide pods providing additional functionality such as log forwarding and metrics.
 
 In the next exercise we will create our own custom Pods to run an application.
 

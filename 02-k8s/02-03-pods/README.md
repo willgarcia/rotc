@@ -144,7 +144,7 @@ kubectl exec -it pod/dockercoins -- /bin/sh
 
 Use Ctrl-D or type `exit` to close the terminal session opened inside the container.
 
-If the pod has multiple containers, you will have to pass the name of the container in addition to the name of the pod:
+If the pod has multiple containers, and you want to `exec` into a contaner other than the first one, you will have to pass the name of the container in addition to the name of the pod:
 
 ```console
 kubectl exec -it pod/dockercoins -c [rng hasher webui worker redis] -- /bin/sh
@@ -152,7 +152,7 @@ kubectl exec -it pod/dockercoins -c [rng hasher webui worker redis] -- /bin/sh
 
 From here, you can execute any command, such as:
 
-- examining the file system (eg: `ls /var/log/..`, `cat /my-app/web.config`)
+- examining the file system (eg: `ls /var/log/`, `cat /my-app/web.config`)
 - interacting with processes in the container (e.g: `ps aux` to list all the processes active)
 
 Links:
@@ -161,7 +161,7 @@ Links:
 
 ## Displaying logs from multiple containers (optional part)
 
-If you want to get the logs of multiple containers in a pod, you might be interested in installing [stern](https://github.com/wercker/stern), a multi pod and container log tailing for Kubernetes. 
+If you want to get the logs of multiple containers in a pod, or multiple pods, you might be interested in installing [stern](https://github.com/wercker/stern), a multi pod and container log tailing for Kubernetes.
 
 On MacOS, Stern can be installed with Homebrew (`brew install stern`). If you are running Windows, you'll need to download the .exe from <https://github.com/wercker/stern/releases>.
 

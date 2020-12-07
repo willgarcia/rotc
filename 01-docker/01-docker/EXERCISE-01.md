@@ -81,7 +81,7 @@ docker images | grep twkoins_webui
 Success!
 
 If you had a failed build along the way, you may also see an orphaned layer called `<none>` when running `docker images` (without grep).
-There's no harm in it being there, but you can delete it by running `docker rmi <container-hash>`.
+There's no harm in it being there, but you can delete it by running `docker rmi <image-hash>`.
 
 #### Note
 

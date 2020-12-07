@@ -95,10 +95,10 @@ Delete the namespace with:
 
 ```console
 # Windows only
-kubectl delete ns $env:TEAM_NAME --output yaml
+kubectl delete ns $env:TEAM_NAME
 
 # MacOS only
-kubectl delete ns ${TEAM_NAME} --output yaml
+kubectl delete ns ${TEAM_NAME}
 ```
 
 And recreate it from a YAML file:
