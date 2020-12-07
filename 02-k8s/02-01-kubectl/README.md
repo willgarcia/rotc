@@ -92,9 +92,9 @@ The output should be similar to this:
 
 ```output
 NAME                                              STATUS   ROLES    AGE     VERSION
-gke-k8s-cluster-default-node-pool-6681a730-d257   Ready    <none>   3d21h   v1.15.11-gke.5
-gke-k8s-cluster-default-node-pool-e61f3b84-f9h6   Ready    <none>   3d21h   v1.15.11-gke.5
-gke-k8s-cluster-default-node-pool-ffbb1244-ghkc   Ready    <none>   3d21h   v1.15.11-gke.5
+gke-k8s-cluster-default-node-pool-6681a730-d257   Ready    <none>   3d21h   v1.15.12-gke.6001
+gke-k8s-cluster-default-node-pool-e61f3b84-f9h6   Ready    <none>   3d21h   v1.15.12-gke.6001
+gke-k8s-cluster-default-node-pool-ffbb1244-ghkc   Ready    <none>   3d21h   v1.15.12-gke.6001
 ```
 
 In a production scenario, the master typically does not execute pods.
