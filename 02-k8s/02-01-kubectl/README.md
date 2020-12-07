@@ -149,18 +149,21 @@ kube-system   prometheus-to-sd-xmzjm                                       2/2  
 kube-system   stackdriver-metadata-agent-cluster-level-c678bc98d-j5sbz     2/2     Running   0          3d21h
 ```
 
-- `coredns`: the default DNS that is used for service discovery in Kubernetes clusters.
+Some components that are typically found in clusters are:
+
+- `coredns`/`kube-dns`: the default DNS that is used for service discovery in Kubernetes clusters.
 - `kube-apiserver`: the Kubernetes API server responsible for the communication between all the components in the cluster
 - `etcd`: the Kubernetes "database" storing all object definitions
 - `kube-controller-manager`: handles node failures, replicating components, maintaining the correct amount of pods etc.
 - `kube-scheduler`: decides which pod to assign to which node based on resource affinity rules / selectors / hardware requirements.
 
+Exactly which of these components are deployed depend on how the cluster is configured (for example, a managed cluster in GCP won't show `etcd` pods).
+
 Finally, there is one component that is typically only present on worker nodes:
 
 - `kube-proxy`: load balances traffic between applications within a node
 
-
-These above pods are what is needed by Kubernetes to operate.
+These pods are what is needed by Kubernetes to operate, as well as additional cluster wide pods providing additional functionality such as log forwarding and metrics.
 
 In the next exercise we will create our own custom Pods to run an application.
 
