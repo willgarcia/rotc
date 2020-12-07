@@ -41,7 +41,7 @@ There are a few noteworthy parts here:
 
 - `metadata`: data to help identify uniquely an object (name, uid)
 - `spec`: describes desired state for the object
-- the container spec: gives the image, volumes to mount, and ports to expose
+  - `spec.template` is the template container spec (image, volumes to mount, and ports to expose etc)
 - `labels`: key/value pairs used to organise and filter objects by labels. These can be added when creating the object or later. See `kubectl get pods --show-labels`.
 
 Apply this deployment with the `kubectl apply` command:
@@ -53,7 +53,7 @@ kubectl apply -f deployment.yml
 Now that the deployment is created, start looking at the events happening in the cluster:
 
 ```console
-kubectl get events -w
+kubectl get events --watch
 ```
 
 Look for a new pod by running `kubectl get pod`. Once you have found it,

@@ -7,7 +7,7 @@ By default, the pod is only accessible by its internal IP within the cluster.
 The internal IP address of the pod can be found with:
 
 ```console
-kubectl get pods -o wide
+kubectl get pods --output wide
 ```
 
 Creating a service will enable us to access the app from outside of the cluster via HTTP.
@@ -18,10 +18,10 @@ Create the service with the following command:
 kubectl apply -f service.yml
 ```
 
-The service is being created and can be list with:
+The service is being created and can be listed with:
 
 ```bash
-kubectl get svc -w
+kubectl get svc --watch
 ```
 
 With minikube, to access the app, run the following command:
@@ -35,3 +35,9 @@ With a Cloud cluster, once the EXTERNAL-IP shows a valid IP (instead of pending)
 Services in Kubernetes open the cluster communication to the outside world.
 
 In the module 3, we will dig into the concept of services to see how they can be used in combination with other resource types to offer HTTPS-enabled services coming with their own domain names.
+
+## Clean up
+
+```console
+kubectl delete -f deployment.yml -f service.yml
+```
