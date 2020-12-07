@@ -109,7 +109,7 @@ A control loop and a controller managed behind the scene by Kubernetes are looki
 
 ## Delete the replicaset
 
-The only way to permanently delete all pods / avoid them to be re-created is to also delete the replica set:
+The correct way to permanently delete all pods & avoid them being re-created is to delete the replica set:
 
 ```bash
 kubectl delete -f replicaset.yml
