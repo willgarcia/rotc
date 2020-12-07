@@ -113,7 +113,7 @@ The spec describe how we want this object to be. It is the definition that you s
 
 If the spec is updated on an object, Kubernetes will reconcile the current state with the spec and take a series of actions (through the controller) to converge to this declared state.
 
-If you look at `images` YAML entry in this output, you will also find all the Docker images that are known by the node. These have been downloaded, stored on the master node and can be used now to create/recreate containers and pods in the node.
+If you look at `images` YAML entry in this output, you will also find all the Docker images that are known by the node. These have been downloaded, stored on the node and can be used now to create/recreate containers and pods in the node (note that in a multi-node environment, different nodes may have difference images cached).
 
 ### Listing the pods of the cluster
 
