@@ -1,4 +1,4 @@
-# 02-01 Kubectl
+# 02-01 `kubectl`
 
 In this module, we introduce `kubectl` to access a remote Kubernetes cluster.
 
@@ -9,7 +9,7 @@ You will learn about:
 
 ## Setup
 
-Depending on where the Kubernetes, follow the following instructions to get access to the cluster.
+Depending on where the Kubernetes cluster for the workshop has been setup, follow the instructions in one of the sections below:
 
 ### GCP
 
@@ -49,24 +49,13 @@ Depending on where the Kubernetes, follow the following instructions to get acce
 
 No code provided. We will only use terminal command lines to access a remote cluster!
 
-Run the following command to verify that all the components of your cluster are healthy:
-
-```console
-kubectl get componentstatus
-```
-
-The output should be similar to this:
-
-```output
-NAME                 STATUS    MESSAGE             ERROR
-controller-manager   Healthy   ok
-scheduler            Healthy   ok
-etcd-0               Healthy   {"health":"true"}
-```
-
 ### Access to the cluster API
 
-Kubernetes runs inside a Linux VM. This VM is not directly accessible but you can find its IP address with:
+When running Kubernetes locally, it typically runs inside a Linux VM. This VM is not directly accessible.
+
+When running Kubernetes on AWS/Azure/GCP etc, the Kubernetes API is hosted by the provider.
+
+You can see the address for the Kubernetes API server using:
 
 ```console
 kubectl cluster-info
