@@ -97,20 +97,19 @@ gke-k8s-cluster-default-node-pool-e61f3b84-f9h6   Ready    <none>   3d21h   v1.1
 gke-k8s-cluster-default-node-pool-ffbb1244-ghkc   Ready    <none>   3d21h   v1.15.12-gke.6001
 ```
 
-In a production scenario, the master typically does not execute pods.
-
-Any Kubernetes Object can be inspected via the kubectl command line.
-Below is an example.
+Any Kubernetes object can be inspected via the `kubectl` command line:
 
 ```console
-kubectl get nodes -o yaml
+kubectl get nodes --output yaml
 ```
+
+`--output yaml` specifies that `kubectl` should print the full object spec, rather than a list as seen above.
 
 There may be a lot of output but have a look at the top of the definition there is a `spec:` section.
 
 Wait, what is the `spec`?
 
-The spec describe how we want this object to be. It is the definition that you supply when defining Kubernetes Objects. This is what is likely stored in version control. 
+The spec describe how we want this object to be. It is the definition that you supply when defining Kubernetes objects. This is what is likely stored in version control.
 
 If the spec is updated on an object, Kubernetes will reconcile the current state with the spec and take a series of actions (through the controller) to converge to this declared state.
 
