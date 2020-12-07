@@ -7,9 +7,10 @@ resource "kubernetes_namespace" "nginx-ingress-ns" {
 }
 
 resource "helm_release" "nginx-ingress-chart" {
-  name  = "nginx-ingress"
-  chart = "nginx-ingress"
-  repository = "https://helm.nginx.com/stable"
+  name  = "ingress-nginx"
+  chart = "ingress-nginx"
+  version = "2.11.1"
+  repository = "https://kubernetes.github.io/ingress-nginx"
 
   namespace = kubernetes_namespace.nginx-ingress-ns.metadata.0.name
 }
