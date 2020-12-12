@@ -1,6 +1,10 @@
-FROM node:10.11.0-alpine
-RUN npm install express redis
+FROM node:15.4.0-alpine
+
 COPY files/ /files/
-COPY webui.js /
+COPY webui-dist.js /files/webui.js
+
+WORKDIR /files
+RUN npm install express redis
+
 CMD ["node", "webui.js"]
 EXPOSE 80
