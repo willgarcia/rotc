@@ -1,7 +1,7 @@
 FROM node:15.4.0-alpine
 
 COPY files/ /files/
-COPY webui-dist.js /files/webui.js
+COPY webui.js /files/webui.js
 
 WORKDIR /files
 RUN npm install express redis
