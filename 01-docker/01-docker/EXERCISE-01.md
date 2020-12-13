@@ -57,7 +57,7 @@ EXPOSE 80
 
 Notes about the _Dockerfile_ (refer to the [Dockerfile reference](https://docs.docker.com/reference/builder/)) for more details):
 
-- `FROM` specifies the base image to build our image upon (_node:10.11.0-alpine_ contains the NodeJS runtime)
+- `FROM` specifies the base image to build our image upon (_node:15.4.0-alpine_ contains the NodeJS runtime)
 - `COPY` simply copies a file from the host file system to the image filesystem
 - `EXPOSE` identifies the network ports the container will listen on
 - `CMD` specifies the executable to run when a container is started from the image (we are using the _exec_ form)
